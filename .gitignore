@@ -17,3 +17,6 @@ yarn-error.log
 /.idea
 /.vscode
 .phpunit.result.cache
+/public/assets/admin/build
+/public/assets/admin/dist
+/public/assets/admin/plugins

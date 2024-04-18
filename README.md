@@ -49,3 +49,10 @@
     Login:      admin@example.com
     Password:   12345j
 
+Для панели управления используется AdminLTE v3.2.0 (Бесплатный шаблон) 
+
+Необходимо скачать 
+
+    https://github.com/ColorlibHQ/AdminLTE/releases
+
+и закинуть в папку public/assets/admin следующие папки build, dist, plugins
