@@ -17,7 +17,7 @@ class AdminUserRequestTest extends TestCase
 
     public function testUserValidateWithEmptyFields(): void
     {
-        $this->actingAs(AdminUser::factory()->create())
+        $this->actingAs(AdminUser::factory()->create(), 'admin')
             ->post($this->routeAdminUsersStore(), [
                 'username' => '',
                 'email' => '',
@@ -35,7 +35,7 @@ class AdminUserRequestTest extends TestCase
 
     public function testUserRegisterIncorrectData(): void
     {
-        $this->actingAs(AdminUser::factory()->create())
+        $this->actingAs(AdminUser::factory()->create(), 'admin')
             ->post($this->routeAdminUsersStore(), [
                 'username' => 'invalid-name',
                 'email' => 'test-example.com',
@@ -52,7 +52,7 @@ class AdminUserRequestTest extends TestCase
     {
         $this->actingAs(AdminUser::factory()->create([
             'email' => 'test@example.com',
-        ]))->post($this->routeAdminUsersStore(), [
+        ]), 'admin')->post($this->routeAdminUsersStore(), [
             'username' => 'Test',
             'email' => 'test@example.com',
             'password' => '12345j',
