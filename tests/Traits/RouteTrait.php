@@ -29,4 +29,14 @@ trait RouteTrait
         return route('admin-users.index');
     }
 
+    public function routeAdminUsersCreate(): string
+    {
+        return route('admin-users.create');
+    }
+
+    public function routeAdminUsersStore(): string
+    {
+        return route('admin-users.store');
+    }
+
 }

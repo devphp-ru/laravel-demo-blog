@@ -36,4 +36,38 @@ class AdminUserControllerTest extends TestCase
         ]);
     }
 
+    public function testGetViewAdminUsersCreate(): void
+    {
+        $title = 'Добавить';
+        $response = $this->get($this->routeAdminUsersCreate());
+
+        $response->assertSuccessful();
+        $response->assertViewIs('admin.admin_users.create');
+        $response->assertViewHasAll([
+            'title' => $title,
+        ]);
+    }
+
+    public function testUserCreate(): void
+    {
+        $response = $this->post($this->routeAdminUsersStore(), [
+            'username' => 'Test',
+            'email' => 'test@example.com',
+            'password' => '12345j',
+            'password_confirmation' => '12345j',
+            'is_banned' => false,
+        ]);
+
+        $response->assertRedirect($this->routeAdminUsersIndex());
+        $response->assertSessionHas([
+            'success' => 'Успешно сохранено.',
+        ]);
+        $this->assertDataBaseCount(AdminUser::class, 1);
+        $this->assertDatabaseHas(AdminUser::class, [
+            'username' => 'Test',
+            'email' => 'test@example.com',
+            'is_banned' => false,
+        ]);
+    }
+
 }
