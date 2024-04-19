@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminLoginRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AdminLoginController extends Controller
@@ -14,14 +14,9 @@ class AdminLoginController extends Controller
         return view('auth.admin_login_form');
     }
 
-    public function login(Request $request): RedirectResponse
+    public function login(AdminLoginRequest $request): RedirectResponse
     {
-        $request->validate([
-            'email' => 'required|string|max:1000|email',
-            'password' => 'required|string|max:1000',
-        ]);
-
-        if (!auth('admin')->attempt($request->only('email', 'password'))) {
+        if (!auth('admin')->attempt($request->validated())) {
             return back()->withErrors(['error' => 'Неверный логин или пароль.'])->onlyInput('email');
         }
 
