@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\Admin\AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +24,6 @@ Route::middleware(['guest:admin'])->prefix('/admin')->group(function () {
 Route::middleware(['admin.auth:admin', 'admin.banned:admin'])->prefix('/admin')->group(function () {
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('admin.user.logout');
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard.index');
+    /** Resource */
+    Route::resource('/admin-users', AdminUserController::class)->except('show');
 });

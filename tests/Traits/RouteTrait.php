@@ -24,4 +24,9 @@ trait RouteTrait
         return route('admin.user.logout');
     }
 
+    public function routeAdminUsersIndex(): string
+    {
+        return route('admin-users.index');
+    }
+
 }
