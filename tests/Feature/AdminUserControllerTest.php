@@ -6,6 +6,7 @@ use App\Models\AdminUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Tests\Traits\RouteTrait;
 
@@ -70,4 +71,51 @@ class AdminUserControllerTest extends TestCase
         ]);
     }
 
+    public function testGetViewAdminUsersEdit(): void
+    {
+        $item = AdminUser::factory()->create();
+        $title = 'Редактировать: ' . $item->username;
+
+        $response = $this->get($this->routeAdminUsersEdit($item));
+
+        $response->assertViewIs('admin.admin_users.edit');
+        $response->assertViewHas([
+            'title' => $title,
+            'item' => $item,
+        ]);
+    }
+
+    public function testUserUpdate(): void
+    {
+        $this->withoutMiddleware();
+
+        $item = AdminUser::factory()->create([
+            'username' => 'Test',
+            'email' => 'test@example.com',
+            'is_banned' => false,
+        ]);
+
+        $response = $this->put($this->routeAdminUsersUpdate($item), [
+            'username' => 'Admin',
+            'email' => 'admim@example.com',
+            'password' => '12345j',
+            'password_confirmation' => '12345j',
+            'is_banned' => true,
+        ]);
+
+        $users = AdminUser::get();
+        $user = $users->first();
+
+        $response->assertRedirect($this->routeAdminUsersIndex());
+        $response->assertSessionHas([
+            'success' => 'Успешно сохранено.',
+        ]);
+        $this->assertDatabaseCount(AdminUser::class, 1);
+        $this->assertDatabaseHas(AdminUser::class,  [
+            'username' => 'Admin',
+            'email' => 'admim@example.com',
+            'is_banned' => 1,
+        ]);
+        $this->assertFalse(Hash::check($item->password, $user->password));
+    }
 }

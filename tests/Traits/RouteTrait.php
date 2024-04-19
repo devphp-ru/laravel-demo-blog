@@ -2,6 +2,8 @@
 
 namespace Tests\Traits;
 
+use App\Models\AdminUser;
+
 trait RouteTrait
 {
     protected function routeAdminDashboardIndex(): string
@@ -37,6 +39,16 @@ trait RouteTrait
     public function routeAdminUsersStore(): string
     {
         return route('admin-users.store');
+    }
+
+    public function routeAdminUsersEdit(AdminUser $item): string
+    {
+        return route('admin-users.edit', $item);
+    }
+
+    public function routeAdminUsersUpdate(AdminUser $item): string
+    {
+        return route('admin-users.update', $item);
     }
 
 }
