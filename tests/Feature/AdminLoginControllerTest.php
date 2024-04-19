@@ -109,12 +109,27 @@ class AdminLoginControllerTest extends TestCase
         $response->assertRedirect($this->routeAdminDashboardIndex());
         $this->assertAuthenticated('admin');
         $this->assertAuthenticatedAs($user, 'admin');
+        $response->assertSessionHas([
+            'success' => 'Вы вошил в систему.',
+        ]);
         $this->assertSame($item->id, $user->id);
         $this->assertSame($item->username, $user->username);
         $this->assertSame($item->email, $item->email);
         $this->assertFalse($user->is_banned);
     }
 
-    
+    public function testCanUserLogout(): void
+    {
+        $item = AdminUser::factory()->create();
+        $this->be($item, 'admin');
+
+        $response = $this->get($this->routeAdminLogout());
+
+        $response->assertRedirect($this->routeAdminLoginForm());
+        $response->assertSessionHas([
+            'success' => 'Вы вышил из системы.',
+        ]);
+        $this->assertGuest('admin');
+    }
 
 }

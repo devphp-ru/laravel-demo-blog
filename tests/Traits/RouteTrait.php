@@ -19,4 +19,9 @@ trait RouteTrait
         return route('admin.login.handler');
     }
 
+    public function routeAdminLogout(): string
+    {
+        return route('admin.user.logout');
+    }
+
 }

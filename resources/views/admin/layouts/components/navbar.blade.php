@@ -7,7 +7,7 @@
             <a href="#" class="nav-link">На сайт</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Выход</a>
+            <a href="{{ route('admin.user.logout') }}" class="nav-link">Выход</a>
         </li>
     </ul>
 

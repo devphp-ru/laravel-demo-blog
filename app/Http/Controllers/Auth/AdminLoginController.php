@@ -29,4 +29,11 @@ class AdminLoginController extends Controller
         return redirect()->route('admin.dashboard.index')->with('success', 'Вы вошил в систему.');
     }
 
+    public function logout(): RedirectResponse
+    {
+        auth('admin')->logout();
+
+        return redirect()->route('admin.login.form')->with('success', 'Вы вышил из системы.');
+    }
+
 }

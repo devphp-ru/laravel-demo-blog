@@ -18,6 +18,9 @@
     <div class="card">
         <div class="card-body login-card-body">
             <p class="login-box-msg">Вход</p>
+            @if (session()->has('success'))
+                <span class="text-success small">{{ session('success') }}</span>
+            @endif
             @error('error')
             <span class="text-red small">{{ $message }}</span>
             @enderror

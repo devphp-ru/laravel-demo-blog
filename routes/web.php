@@ -21,5 +21,6 @@ Route::middleware(['guest:admin'])->prefix('/admin')->group(function () {
 });
 
 Route::middleware(['admin.auth:admin', 'admin.banned:admin'])->prefix('/admin')->group(function () {
+    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('admin.user.logout');
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard.index');
 });
