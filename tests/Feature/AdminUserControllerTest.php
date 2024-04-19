@@ -118,4 +118,20 @@ class AdminUserControllerTest extends TestCase
         ]);
         $this->assertFalse(Hash::check($item->password, $user->password));
     }
+
+    public function testUserDelete(): void
+    {
+        $item = AdminUser::factory()->create();
+
+        $response = $this->delete($this->routeAdminUsersDestroy($item));
+        $user = AdminUser::find($item->id);
+
+        $response->assertRedirect($this->routeAdminUsersIndex());
+        $response->assertSessionHas([
+            'success' => 'Успешно удалено.',
+        ]);
+        $this->assertNull($user);
+        $this->assertDatabaseCount(AdminUser::class, 0);
+    }
+
 }

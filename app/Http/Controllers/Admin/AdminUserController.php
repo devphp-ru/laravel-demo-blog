@@ -86,9 +86,15 @@ class AdminUserController extends BaseController
         return redirect()->route('admin-users.index')->with('success', 'Успешно сохранено.');
     }
 
-    public function destroy(AdminUser $adminUser)
+    public function destroy(int $id): RedirectResponse
     {
-        //
+        $result = AdminUser::find($id)->delete();
+
+        if (!$result) {
+            return back()->withErrors(['error' => 'Ошибка удаления.']);
+        }
+
+        return redirect()->route('admin-users.index')->with('success', 'Успешно удалено.');
     }
 
 }

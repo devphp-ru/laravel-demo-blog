@@ -51,4 +51,9 @@ trait RouteTrait
         return route('admin-users.update', $item);
     }
 
+    public function routeAdminUsersDestroy(AdminUser $item): string
+    {
+        return route('admin-users.destroy', $item);
+    }
+
 }
