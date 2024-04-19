@@ -20,6 +20,6 @@ Route::middleware(['guest:admin'])->prefix('/admin')->group(function () {
     Route::post('/login', [AdminLoginController::class, 'login'])->name('admin.login.handler');
 });
 
-Route::middleware(['admin.auth:admin'])->prefix('/admin')->group(function () {
+Route::middleware(['admin.auth:admin', 'admin.banned:admin'])->prefix('/admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard.index');
 });
