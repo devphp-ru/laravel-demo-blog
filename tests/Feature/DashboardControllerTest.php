@@ -4,12 +4,14 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use Tests\Traits\RouteTrait;
 
 class DashboardControllerTest extends TestCase
 {
     use RouteTrait;
+    use WithoutMiddleware;
 
     public function testGetAResponseFromTheIndexPage(): void
     {

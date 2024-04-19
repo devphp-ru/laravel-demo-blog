@@ -9,4 +9,19 @@ trait RouteTrait
         return route('admin.dashboard.index');
     }
 
+    protected function routeAdminLoginForm(): string
+    {
+        return route('admin.login.form');
+    }
+
+    public function routeAdminLoginHandler(): string
+    {
+        return route('admin.login.handler');
+    }
+
+    public function routeAdminLogout(): string
+    {
+        return route('admin.user.logout');
+    }
+
 }
