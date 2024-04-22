@@ -1,17 +1,23 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
+use App\Models\AdminUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use Tests\Traits\RouteTrait;
 
 class DashboardControllerTest extends TestCase
 {
     use RouteTrait;
-    use WithoutMiddleware;
+    use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(AdminUser::factory()->create(), 'admin');
+    }
 
     public function testGetAResponseFromTheIndexPage(): void
     {

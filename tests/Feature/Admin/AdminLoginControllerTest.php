@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Models\AdminUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Tests\Traits\RouteTrait;
 
@@ -61,7 +60,7 @@ class AdminLoginControllerTest extends TestCase
 
     public function testUserLoginCannotLoginWithEmailThatDoesNotExist(): void
     {
-        $item = AdminUser::factory()->create();
+        AdminUser::factory()->create();
 
         $response = $this->from($this->routeAdminLoginForm())->post($this->routeAdminLoginHandler(), [
             'email' => 'test@example.ru',

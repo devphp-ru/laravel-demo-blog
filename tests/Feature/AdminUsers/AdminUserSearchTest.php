@@ -1,13 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\AdminUsers;
 
 use App\Models\AdminUser;
 use App\Services\AdminUsers\AdminUserRepository;
 use App\Services\AdminUsers\AdminUserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 use Tests\Traits\RouteTrait;
@@ -16,7 +14,6 @@ class AdminUserSearchTest extends TestCase
 {
     use RouteTrait;
     use RefreshDatabase;
-    use WithoutMiddleware;
 
     private AdminUserService $adminUserService;
 
@@ -24,7 +21,7 @@ class AdminUserSearchTest extends TestCase
     {
         parent::setUp();
 
-        $this->actingAs(AdminUser::factory()->create());
+        $this->actingAs(AdminUser::factory()->create(), 'admin');
         $this->adminUserService = new AdminUserService(new AdminUserRepository());
     }
 
