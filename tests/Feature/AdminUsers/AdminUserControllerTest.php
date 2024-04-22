@@ -1,11 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\AdminUsers;
 
 use App\Models\AdminUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Tests\Traits\RouteTrait;
@@ -14,7 +12,13 @@ class AdminUserControllerTest extends TestCase
 {
     use RouteTrait;
     use RefreshDatabase;
-    use WithoutMiddleware;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(AdminUser::factory()->create(), 'admin');
+    }
 
     public function testGetAResponseFromAdminUsersIndex(): void
     {
@@ -51,14 +55,13 @@ class AdminUserControllerTest extends TestCase
 
     public function testUserCreate(): void
     {
-        $response = $this->actingAs(AdminUser::factory()->create(), 'admin')
-            ->post($this->routeAdminUsersStore(), [
-                'username' => 'Test',
-                'email' => 'test@example.com',
-                'password' => '12345j',
-                'password_confirmation' => '12345j',
-                'is_banned' => false,
-            ]);
+        $response = $this->post($this->routeAdminUsersStore(), [
+            'username' => 'Test',
+            'email' => 'test@example.com',
+            'password' => '12345j',
+            'password_confirmation' => '12345j',
+            'is_banned' => false,
+        ]);
 
         $response->assertRedirect($this->routeAdminUsersIndex());
         $response->assertSessionHas([
@@ -88,22 +91,19 @@ class AdminUserControllerTest extends TestCase
 
     public function testUserUpdate(): void
     {
-        $this->withoutMiddleware();
-
         $item = AdminUser::factory()->create([
             'username' => 'Test',
             'email' => 'test@example.com',
             'is_banned' => false,
         ]);
 
-        $response = $this->actingAs($item, 'admin')
-            ->put($this->routeAdminUsersUpdate($item), [
-                'username' => 'Admin',
-                'email' => 'admim@example.com',
-                'password' => '12345j',
-                'password_confirmation' => '12345j',
-                'is_banned' => true,
-            ]);
+        $response = $this->put($this->routeAdminUsersUpdate($item), [
+            'username' => 'Admin',
+            'email' => 'admim@example.com',
+            'password' => '12345j',
+            'password_confirmation' => '12345j',
+            'is_banned' => true,
+        ]);
 
         $users = AdminUser::get();
         $user = $users->first();
@@ -112,7 +112,7 @@ class AdminUserControllerTest extends TestCase
         $response->assertSessionHas([
             'success' => 'Успешно сохранено.',
         ]);
-        $this->assertDatabaseCount(AdminUser::class, 1);
+        $this->assertDatabaseCount(AdminUser::class, 2);
         $this->assertDatabaseHas(AdminUser::class,  [
             'username' => 'Admin',
             'email' => 'admim@example.com',
@@ -133,7 +133,7 @@ class AdminUserControllerTest extends TestCase
             'success' => 'Успешно удалено.',
         ]);
         $this->assertNull($user);
-        $this->assertDatabaseCount(AdminUser::class, 0);
+        $this->assertDatabaseCount(AdminUser::class, 1);
     }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\AdminUserRequest;
+use App\Models\AdminUser;
 use App\Services\AdminUsers\AdminUserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -45,10 +46,8 @@ class AdminUserController extends BaseController
         return redirect()->route('admin-users.index')->with('success', 'Успешно сохранено.');
     }
 
-    public function edit(int $id): View
+    public function edit(AdminUser $adminUser): View
     {
-        $adminUser = $this->adminUserService->getById($id);
-
         $title = 'Редактировать: ' . $adminUser->username;
 
         return view('admin.admin_users.edit', [
@@ -59,10 +58,9 @@ class AdminUserController extends BaseController
 
     public function update(
         AdminUserRequest $request,
-        int $id,
+        AdminUser $adminUser,
     ): RedirectResponse
     {
-        $adminUser = $this->adminUserService->getById($id);
         $result = $this->adminUserService->update($request, $adminUser);
 
         if (!$result) {
@@ -72,9 +70,8 @@ class AdminUserController extends BaseController
         return redirect()->route('admin-users.index')->with('success', 'Успешно сохранено.');
     }
 
-    public function destroy(int $id): RedirectResponse
+    public function destroy(AdminUser $adminUser): RedirectResponse
     {
-        $adminUser = $this->adminUserService->getById($id);
         $result = $this->adminUserService->destroy($adminUser);
 
         if (!$result) {
