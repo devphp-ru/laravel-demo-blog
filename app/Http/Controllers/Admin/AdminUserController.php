@@ -3,17 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\AdminUserRequest;
-use App\Models\AdminUser;
+use App\Services\AdminUsers\AdminUserService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AdminUserController extends BaseController
 {
-    public function index(): View
+    public function __construct(private AdminUserService $adminUserService) {}
+
+    public function index(Request $request): View
     {
         $title = 'Администраторы';
 
-        $users = AdminUser::orderByDesc('id')->paginate(10);
+        $perPage = 10;
+        $users = $this->adminUserService->getAllAdminsWithPagination($request, $perPage);
 
         return view('admin.admin_users.index', [
             'title' => $title,
@@ -32,9 +36,7 @@ class AdminUserController extends BaseController
 
     public function store(AdminUserRequest $request): RedirectResponse
     {
-        $request->merge(['is_banned' => $request->input('is_banned', '0')]);
-
-        $result = AdminUser::create($request->only((new AdminUser())->getFillable()));
+        $result = $this->adminUserService->create($request);
 
         if (!$result) {
             return back()->withErrors(['error' => 'Ошибка сохранения.'])->onlyInput('username', 'email');
@@ -45,7 +47,7 @@ class AdminUserController extends BaseController
 
     public function edit(int $id): View
     {
-        $adminUser = AdminUser::find($id);
+        $adminUser = $this->adminUserService->getById($id);
 
         $title = 'Редактировать: ' . $adminUser->username;
 
@@ -60,18 +62,8 @@ class AdminUserController extends BaseController
         int $id,
     ): RedirectResponse
     {
-        $adminUser = AdminUser::find($id);
-
-        $request->validate([
-            'username' => 'required|string|min:2|max:255|regex:/^[А-ЯЁёа-яA-Za-z ]+$/u',
-            'email' => 'required|string|max:1000|email|unique:admin_users,email,' . $adminUser->id,
-            'password' => 'nullable|string|min:5|max:255|confirmed|regex:/^[A-Za-z0-9]+$/u',
-        ]);
-
-        $request->merge(['is_banned' => $request->input('is_banned', 0)]);
-        $request->merge(['password' => $request->input('password') ?? $adminUser->password]);
-
-        $result = $adminUser->update($request->only($adminUser->getFillable()));
+        $adminUser = $this->adminUserService->getById($id);
+        $result = $this->adminUserService->update($request, $adminUser);
 
         if (!$result) {
             return back()->withErrors(['error' => 'Ошибка сохранения.'])->onlyInput('username', 'email');
@@ -82,7 +74,8 @@ class AdminUserController extends BaseController
 
     public function destroy(int $id): RedirectResponse
     {
-        $result = AdminUser::find($id)->delete();
+        $adminUser = $this->adminUserService->getById($id);
+        $result = $this->adminUserService->destroy($adminUser);
 
         if (!$result) {
             return back()->withErrors(['error' => 'Ошибка удаления.']);
