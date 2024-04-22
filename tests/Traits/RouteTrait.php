@@ -2,6 +2,8 @@
 
 namespace Tests\Traits;
 
+use App\Models\AdminUser;
+
 trait RouteTrait
 {
     protected function routeAdminDashboardIndex(): string
@@ -22,6 +24,36 @@ trait RouteTrait
     public function routeAdminLogout(): string
     {
         return route('admin.user.logout');
+    }
+
+    public function routeAdminUsersIndex(): string
+    {
+        return route('admin-users.index');
+    }
+
+    public function routeAdminUsersCreate(): string
+    {
+        return route('admin-users.create');
+    }
+
+    public function routeAdminUsersStore(): string
+    {
+        return route('admin-users.store');
+    }
+
+    public function routeAdminUsersEdit(AdminUser $item): string
+    {
+        return route('admin-users.edit', $item);
+    }
+
+    public function routeAdminUsersUpdate(AdminUser $item): string
+    {
+        return route('admin-users.update', $item);
+    }
+
+    public function routeAdminUsersDestroy(AdminUser $item): string
+    {
+        return route('admin-users.destroy', $item);
     }
 
 }

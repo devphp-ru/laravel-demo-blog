@@ -37,7 +37,7 @@ class AdminLoginControllerTest extends TestCase
 
         $response->assertRedirect($this->routeAdminLoginForm());
         $response->assertSessionHasErrors([
-            'email' => 'Значение поля email должно быть действительным электронным адресом.',
+            'email' => 'Значение поля Email должно быть действительным электронным адресом.',
         ]);
         $this->assertTrue(session()->hasOldInput('email'));
         $this->assertFalse(session()->hasOldInput('password'));

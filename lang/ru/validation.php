@@ -142,7 +142,8 @@ return [
     'url'                  => 'Значение поля :attribute имеет ошибочный формат URL.',
     'uuid'                 => 'Значение поля :attribute должно быть корректным UUID.',
     'attributes'           => [
-        'name'             => 'имя',
-        'password'         => 'пароль',
+        'username'         => 'Имя',
+        'email'            => 'Email',
+        'password'         => 'Пароль',
     ],
 ];
