@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,4 +27,5 @@ Route::middleware(['admin.auth:admin', 'admin.banned:admin'])->prefix('/admin')-
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard.index');
     /** Resource */
     Route::resource('/admin-users', AdminUserController::class)->except('show');
+    Route::resource('/users', UserController::class)->except('show');
 });
