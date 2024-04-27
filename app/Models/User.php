@@ -3,42 +3,46 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * Class User
+ *
+ * @property int $id ID
+ * @property string $name Имя
+ * @property string $email Email
+ * @property string $email_verified_at Подтверждение email
+ * @property string $password Пароль
+ * @property string $remember_token Токен
+ * @property string $is_banned Бан
+ *
+ * @mixin Builder
+ * @package App\Models
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'is_banned',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
+        'is_banned' => 'boolean',
+        'password' => 'hashed',
         'email_verified_at' => 'datetime',
     ];
+
 }
