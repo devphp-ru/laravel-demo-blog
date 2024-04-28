@@ -32,6 +32,9 @@
                 <li class="nav-item">
                     <a href="{{ route('categories.index') }}" class="nav-link"><i class="nav-icon far fa-circle text-info"></i><p>Категории</p></a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('tags.index') }}" class="nav-link"><i class="nav-icon far fa-circle text-info"></i><p>Тэги</p></a>
+                </li>
             </ul>
         </nav>
     </div>

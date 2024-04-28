@@ -146,5 +146,6 @@ return [
         'username'         => 'Имя',
         'email'            => 'Email',
         'password'         => 'Пароль',
+        'is_active'         => 'Статус',
     ],
 ];
