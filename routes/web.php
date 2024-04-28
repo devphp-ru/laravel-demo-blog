@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +29,5 @@ Route::middleware(['admin.auth:admin', 'admin.banned:admin'])->prefix('/admin')-
     /** Resource */
     Route::resource('/admin-users', AdminUserController::class)->except('show');
     Route::resource('/users', UserController::class)->except('show');
+    Route::resource('/categories', CategoryController::class);
 });
