@@ -33,7 +33,7 @@ class CategoryRequestTest extends TestCase
             'parent_id' => 'Значение поля parent id имеет некорректный формат.',
             'name' => 'Поле Имя обязательно.',
             'content' => 'Количество символов в значении поля content не может превышать 65000.',
-            'is_active' => 'Значение поля is active имеет некорректный формат.',
+            'is_active' => 'Значение поля Статус имеет некорректный формат.',
         ]);
 
         $this->assertFalse(session()->hasOldInput('parent_id'));
@@ -55,7 +55,7 @@ class CategoryRequestTest extends TestCase
             'parent_id' => 'Значение поля parent id имеет некорректный формат.',
             'name' => 'Значение поля Имя имеет некорректный формат.',
             'content' => 'Количество символов в значении поля content не может превышать 65000.',
-            'is_active' => 'Значение поля is active имеет некорректный формат.',
+            'is_active' => 'Значение поля Статус имеет некорректный формат.',
         ]);
 
         $this->assertTrue(session()->hasOldInput('parent_id'));
