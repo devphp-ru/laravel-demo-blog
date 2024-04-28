@@ -15,5 +15,17 @@ $(() => {
             $isBanned.prop(`checked`, false);
             $isBanned.val(0);
         }
-    })
+    });
+
+    const $isActive = $(`#is_active`);
+
+    $isActive.click(function () {
+        if ($(this).is(`:checked`)) {
+            $isActive.prop(`checked`, true);
+            $isActive.val(1);
+        } else {
+            $isActive.prop(`checked`, false);
+            $isActive.val(0);
+        }
+    });
 });

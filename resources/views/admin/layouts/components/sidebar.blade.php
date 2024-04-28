@@ -29,6 +29,9 @@
                 <li class="nav-item">
                     <a href="{{ route('users.index') }}" class="nav-link"><i class="nav-icon far fa-circle text-info"></i><p>Пользователи</p></a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('categories.index') }}" class="nav-link"><i class="nav-icon far fa-circle text-info"></i><p>Категории</p></a>
+                </li>
             </ul>
         </nav>
     </div>
