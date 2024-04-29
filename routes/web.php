@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,5 @@ Route::middleware(['admin.auth:admin', 'admin.banned:admin'])->prefix('/admin')-
     Route::resource('/users', UserController::class)->except('show');
     Route::resource('/categories', CategoryController::class);
     Route::resource('/tags', TagController::class);
+    Route::resource('/articles', ArticleController::class);
 });

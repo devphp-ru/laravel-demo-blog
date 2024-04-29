@@ -5,6 +5,8 @@ $(() => {
         }
     });
 
+    $('.select2').select2()
+
     const $isBanned = $(`#is_banned`);
 
     $isBanned.click(function () {

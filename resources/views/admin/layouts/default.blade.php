@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{{ asset('/assets/admin/plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="{{ asset('/assets/admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/admin/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/admin/plugins/jqvmap/jqvmap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/admin/dist/css/adminlte.min.css') }}">
@@ -38,6 +40,7 @@
     $.widget.bridge('uibutton', $.ui.button)
 </script>
 <script src="{{ asset('/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('/assets/admin/plugins/select2/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('/assets/admin/plugins/chart.js/Chart.min.js') }}"></script>
 <script src="{{ asset('/assets/admin/plugins/sparklines/sparkline.js') }}"></script>
 <script src="{{ asset('/assets/admin/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
