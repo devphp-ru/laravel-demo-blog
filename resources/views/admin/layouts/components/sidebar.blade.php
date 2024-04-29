@@ -22,7 +22,6 @@
 
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
                 <li class="nav-item">
                     <a href="{{ route('admin-users.index') }}" class="nav-link"><i class="nav-icon far fa-circle text-info"></i><p>Администраторы</p></a>
                 </li>
@@ -34,6 +33,9 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('tags.index') }}" class="nav-link"><i class="nav-icon far fa-circle text-info"></i><p>Тэги</p></a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('articles.index') }}" class="nav-link"><i class="nav-icon far fa-circle text-info"></i><p>Статьи</p></a>
                 </li>
             </ul>
         </nav>
