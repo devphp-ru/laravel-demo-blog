@@ -37,6 +37,9 @@
                 <li class="nav-item">
                     <a href="{{ route('articles.index') }}" class="nav-link"><i class="nav-icon far fa-circle text-info"></i><p>Статьи</p></a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.article.comments') }}" class="nav-link"><i class="nav-icon fas fa-comments text-info"></i><p>Комментарии статей</p></a>
+                </li>
             </ul>
         </nav>
     </div>

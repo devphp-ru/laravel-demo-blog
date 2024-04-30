@@ -16,7 +16,7 @@ final class ArticleRepository
         int $perPage,
     ): LengthAwarePaginator
     {
-        $builder = Article::with('category', 'tags');
+        $builder = Article::with('category', 'tags', 'comments');
         $builder = $this->adminSearch($request, $builder);
 
         return $builder
