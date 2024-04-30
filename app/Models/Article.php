@@ -6,6 +6,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Article
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @property-read \App\Models\Category $category Категории
  * @property-read \App\Models\Tag $tags Тэги
+ * @property-read \App\Models\ArticleComment $comments Комментарии
  *
  * @mixin Builder
  * @package App\Models
@@ -61,6 +63,11 @@ class Article extends BaseModel
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(ArticleComment::class);
     }
 
 }
