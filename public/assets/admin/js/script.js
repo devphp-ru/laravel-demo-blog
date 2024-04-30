@@ -30,4 +30,49 @@ $(() => {
             $isActive.val(0);
         }
     });
+
+    $(document).on(`click`, `.change-value`, function () {
+        const id = parseInt($(this).data(`id`));
+        const value = parseInt($(this).data(`value`));
+        console.log('>>>', id, value);
+        if (!isNaN(id) && (id > 0)) {
+            $.ajax({
+                url: `/api/v1/change-status`,
+                method: 'PUT',
+                dataType: `json`,
+                cache: false,
+                data: {id, value},
+                success: function (data) {
+                   if (!data.status) {
+
+                   } else {
+                       const commId = $(`#com${id}`);
+                       commId.removeData(`value`);
+                       commId.text(data.value === 1 ? `нет` : `да`);
+                       commId.attr(`data-value`, data.value);
+                   }
+                }
+            });
+        }
+    });
+
+    $(document).on(`click`, `.delete-comment`, function () {
+        const id = parseInt($(this).data('id'));
+        if (!isNaN(id) && id > 0) {
+            $.ajax({
+                url: `/api/v1/delete-comment`,
+                method: `DELETE`,
+                dataType: `json`,
+                cache: false,
+                data: {id},
+                success: function (data) {
+                    if (!data.status) {
+
+                    } else {
+                        $(`#tr${id}`).remove();
+                    }
+                }
+            })
+        }
+    });
 });

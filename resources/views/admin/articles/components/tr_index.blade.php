@@ -4,7 +4,7 @@
     <td>{{ $value->category->name }}</td>
     <td><a href="{{ route('articles.edit', $value) }}">{{ $value->title }}</a></td>
     <td>{{ $value->views }}</td>
-    <td>{{ 0 }}</td>
+    <td>{{ $value->comments->count() }}</td>
     <td>{{ $value->is_active ? 'да' : 'нет' }}</td>
     <td>
         <a href="{{ route('articles.edit', $value) }}" type="button" class="btn btn-block btn-primary btn-flat">Редактировать</a>

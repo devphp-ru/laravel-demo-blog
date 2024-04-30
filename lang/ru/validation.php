@@ -152,5 +152,6 @@ return [
         'image'            => 'Изображение',
         'category_id'      => 'Категории',
         'parent_id'        => 'Категории',
+        'article_id'       => 'ID статьи',
     ],
 ];
