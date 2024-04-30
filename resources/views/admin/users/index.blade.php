@@ -33,6 +33,9 @@
                             <i class="fa fa-window-close" aria-hidden="true"></i>
                         </a>
                     @endif
+                    @if (request()->has('q') && !$paginator->isEmpty())
+                        <span class="text-success">По запросу "{{ request()->input('q') }}" найдено</span>
+                    @endif
                     @if (request()->has('q') && $paginator->isEmpty())
                         <span class="text-danger">По вашему запросу ничего не найдено</span>
                     @endif
