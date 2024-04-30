@@ -26,12 +26,14 @@ Route::middleware(['guest:admin'])->prefix('/admin')->group(function () {
 });
 
 Route::middleware(['admin.auth:admin', 'admin.banned:admin'])->prefix('/admin')->group(function () {
-    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('admin.user.logout');
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard.index');
     /** Resource */
     Route::resource('/admin-users', AdminUserController::class)->except('show');
     Route::resource('/users', UserController::class)->except('show');
     Route::resource('/categories', CategoryController::class);
     Route::resource('/tags', TagController::class);
     Route::resource('/articles', ArticleController::class);
+    /** Custom */
+    Route::get('/article-comments', [DashboardController::class, 'articleComments'])->name('admin.article.comments');
+    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('admin.user.logout');
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard.index');
 });
