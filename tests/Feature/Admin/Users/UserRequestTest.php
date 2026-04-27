@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Users;
 
 use App\Models\AdminUser;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UserRequestTest extends TestCase
@@ -19,7 +20,7 @@ class UserRequestTest extends TestCase
         $this->actingAs(AdminUser::factory()->create(), 'admin');
     }
 
-    public function testUserValidateWithEmptyFields(): void
+    public function test_validate_with_empty_fields(): void
     {
         $this->post(route('users.store'), [
             'name' => '',
@@ -36,7 +37,7 @@ class UserRequestTest extends TestCase
         $this->assertFalse(session()->hasOldInput('password'));
     }
 
-    public function testUserValidateIncorrectData(): void
+    public function test_validate_incorrect_data(): void
     {
         $this->post(route('users.store'), [
             'name' => ' ! Test @',
@@ -54,7 +55,7 @@ class UserRequestTest extends TestCase
         $this->assertFalse(session()->hasOldInput('password'));
     }
 
-    public function testUserValidateWithExistingEmail(): void
+    public function test_check_existence_email(): void
     {
         $item = User::factory()->create();
 
@@ -72,7 +73,7 @@ class UserRequestTest extends TestCase
         $this->assertFalse(session()->hasOldInput('password'));
     }
 
-    public function testUserValidateCorrectData(): void
+    public function test_validate_correct_data(): void
     {
         $response = $this->post(route('users.store'), [
             'name' => 'Test Test',
@@ -84,11 +85,13 @@ class UserRequestTest extends TestCase
         $user = User::get()->first();
 
         $response->assertRedirect(route('users.index'));
+
         $this->assertDatabaseCount(User::class, 1);
         $this->assertDatabaseHas(User::class, [
             'name' => 'Test Test',
             'email' => 'test@example.com',
         ]);
+
         $this->assertSame('Test Test', $user->name);
         $this->assertSame('test@example.com', $user->email);
         $this->assertFalse($user->is_banned);

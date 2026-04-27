@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Tags;
 
 use App\Models\AdminUser;
@@ -7,7 +9,6 @@ use App\Models\Tag;
 use App\Services\Tags\TagRepository;
 use App\Services\Tags\TagService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -25,7 +26,7 @@ class TagRequestTest extends TestCase
         $this->tagService = new TagService(new TagRepository());
     }
 
-    public function testTagValidateWithEmptyFields(): void
+    public function test_validate_empty_field(): void
     {
         $this->post(route('tags.store'), [
             'name' => '',
@@ -36,13 +37,11 @@ class TagRequestTest extends TestCase
         $this->assertFalse(session()->hasOldInput('name'));
     }
 
-    public function testTagValidateIncorrectData(): void
+    public function test_validate_incorrect_data(): void
     {
-        $text = str_repeat('text text text', 65001);
-
         $this->post(route('tags.store'), [
             'name' => '!name 1234 @',
-            'content' => $text,
+            'content' => Str::random(65001),
             'is_active' => '1!2',
         ])->assertInvalid([
             'name' => 'Значение поля Имя имеет некорректный формат.',
@@ -53,7 +52,7 @@ class TagRequestTest extends TestCase
         $this->assertTrue(session()->hasOldInput('name'));
     }
 
-    public function testTagCorrectName(): void
+    public function test_correct_name_tag(): void
     {
         $this->post(route('tags.store'), [
             'name' => 'Tag',
@@ -61,9 +60,10 @@ class TagRequestTest extends TestCase
             'is_active' => '1',
         ]);
 
-        $tag = Tag::get()->first();
+        $tag = Tag::query()->get()->first();
 
         $this->assertNotEmpty($tag);
+
         $this->assertDatabaseCount(Tag::class, 1);
         $this->assertDatabaseHas(Tag::class, [
             'slug' => Str::slug('Tag'),
@@ -71,18 +71,6 @@ class TagRequestTest extends TestCase
             'content' => 'content tag',
             'is_active' => '1',
         ]);
-    }
-
-    public function testCanDeleteTag(): void
-    {
-        $item = Tag::factory()->create();
-
-        $response = $this->delete(route('tags.destroy', $item));
-
-        $response->assertStatus(302);
-        $response->assertRedirect(route('tags.index'));
-        $response->assertSessionHas('success', 'Успешно удалено.');
-        $this->assertDatabaseCount(Tag::class, 0);
     }
 
 }

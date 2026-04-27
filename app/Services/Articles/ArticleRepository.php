@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Articles;
 
 use App\Http\Requests\ArticleRequest;
@@ -9,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
-final class ArticleRepository
+final readonly class ArticleRepository
 {
     public function getAllAdminsWithPagination(
         Request $request,
@@ -31,11 +33,8 @@ final class ArticleRepository
     ): Builder
     {
         if ($request->filled('q') ) {
-            $query = \trim($request->input('q'));
-            $query = \preg_replace('#[^0-9-a-zA-ZА-Яа-яёЁ@\.]#u', ' ', $query);
-            $query = \preg_replace('#\s+#u', ' ', $query);
-            $query = \mb_strtolower(\trim($query));
-            $like = "%{$query}%";
+            $query = clearSearchBarFromCharacters($request->input('q'));
+            $like = "%$query%";
 
             $builder->orWhere(DB::raw('lower(title)'), 'like', $like);
         }
@@ -45,8 +44,8 @@ final class ArticleRepository
 
     public function create(ArticleRequest $request): ?Article
     {
-        $result = Article::create($request->only((new Article())->getFillable()));
-        $result ? $result->tags()->sync($request->input('tags')) : null;
+        $result = Article::create($request->only(new Article()->getFillable()));
+        $result?->tags()->sync($request->input('tags'));
 
         return $result ?? null;
     }
@@ -57,7 +56,7 @@ final class ArticleRepository
     ): ?Article
     {
         $result = $article->update($request->only($article->getFillable()));
-        $result ? $article->tags()->sync($request->input('tags', [])) : null;
+        $article->tags()->sync($request->input('tags', []));
 
         return $result ? $article : null;
     }
@@ -65,7 +64,7 @@ final class ArticleRepository
     public function destroy(Article $article): bool
     {
         $result = $article->delete();
-        $result ? $article->tags()->sync([]) : null;
+        $article->tags()->sync([]);
 
         return $result;
     }

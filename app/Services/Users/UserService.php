@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Users;
 
 use App\Http\Requests\UserRequest;
@@ -7,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-final class UserService
+final readonly class UserService
 {
     public function __construct(private UserRepository $userRepository) {}
 

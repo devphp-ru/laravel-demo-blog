@@ -11,13 +11,13 @@ use Illuminate\View\View;
 
 class TagController extends BaseController
 {
-    public function __construct(private TagService $tagService) {}
+    public function __construct(private readonly TagService $tagService) {}
 
     public function index(Request $request): View
     {
         $title = __('Тэги');
-        $perPage = 10;
 
+        $perPage = 10;
         $tags = $this->tagService->getAllAdminsWithPagination($request, $perPage);
 
         return view('admin.tags.index', [
@@ -40,10 +40,10 @@ class TagController extends BaseController
         $result = $this->tagService->create($request);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.']);
+            return back()->withErrors(['error' => __('Ошибка сохранения.')]);
         }
 
-        return redirect()->route('tags.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('tags.index')->with('success', __('Успешно сохранено.'));
     }
 
     public function edit(Tag $tag): View
@@ -59,26 +59,26 @@ class TagController extends BaseController
     public function update(
         TagRequest $request,
         Tag $tag,
-    )
+    ): RedirectResponse
     {
         $result = $this->tagService->update($request, $tag);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.']);
+            return back()->withErrors(['error' => __('Ошибка сохранения.')]);
         }
 
-        return redirect()->route('tags.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('tags.index')->with('success', __('Успешно сохранено.'));
     }
 
-    public function destroy(Tag $tag)
+    public function destroy(Tag $tag): RedirectResponse
     {
         $result = $this->tagService->destroy($tag);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка удаления.']);
+            return back()->withErrors(['error' => __('Ошибка удаления.')]);
         }
 
-        return redirect()->route('tags.index')->with('success', 'Успешно удалено.');
+        return redirect()->route('tags.index')->with('success', __('Успешно удалено.'));
     }
 
 }

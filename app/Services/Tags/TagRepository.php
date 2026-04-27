@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Tags;
 
 use App\Http\Requests\TagRequest;
@@ -10,11 +12,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 
-final class TagRepository
+final readonly class TagRepository
 {
     public function getForSelect(): SupportCollection
     {
-        return Tag::get()->pluck('name', 'id');
+        return Tag::query()->get()->pluck('name', 'id');
     }
 
     public function getAllAdminsWithPagination(
@@ -37,11 +39,8 @@ final class TagRepository
     ): Builder
     {
         if ($request->filled('q') ) {
-            $query = \trim($request->input('q'));
-            $query = \preg_replace('#[^0-9-a-zA-ZА-Яа-яёЁ@\.]#u', ' ', $query);
-            $query = \preg_replace('#\s+#u', ' ', $query);
-            $query = \mb_strtolower(\trim($query));
-            $like = "%{$query}%";
+            $query = clearSearchBarFromCharacters($request->input('q'));
+            $like = "%$query%";
 
             $builder->orWhere(DB::raw('lower(name)'), 'like', $like);
         }
@@ -51,7 +50,7 @@ final class TagRepository
 
     public function create(TagRequest $request): ?Tag
     {
-        $result = Tag::create($request->only((new Tag())->getFillable()));
+        $result = Tag::create($request->only(new Tag()->getFillable()));
 
         return $result ?? null;
     }

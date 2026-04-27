@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Articles;
 
 use App\Http\Requests\ArticleRequest;
@@ -8,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 
-final class ArticleService
+final readonly class ArticleService
 {
     public function __construct(private ArticleRepository $ArticleRepository) {}
 
@@ -23,6 +25,7 @@ final class ArticleService
     public function create(ArticleRequest $request): ?Article
     {
         $request->merge(['is_active' => $request->input('is_active', '0')]);
+
         if ($request->hasFile('image')) {
             $request->merge(['thumbnail' => $request->file('image')->store('/uploads/articles', 'local')]);
         }
@@ -48,11 +51,13 @@ final class ArticleService
 
     public function destroy(Article $article): bool
     {
-        if ($article->thumbnail) {
+        $result = $this->ArticleRepository->destroy($article);
+
+        if ($result && $article->thumbnail) {
             Storage::delete($article->thumbnail);
         }
 
-        return $this->ArticleRepository->destroy($article);
+        return $result;
     }
 
 }

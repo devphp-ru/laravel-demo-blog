@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Users;
 
 use App\Models\AdminUser;
@@ -7,7 +9,6 @@ use App\Models\User;
 use App\Services\Users\UserRepository;
 use App\Services\Users\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 
@@ -24,9 +25,10 @@ class UserSearchTest extends TestCase
         $this->userService = new UserService(new UserRepository());
     }
 
-    public function testSearchUsersToNameAndEmail(): void
+    public function test_search_to_name_and_email(): void
     {
         $item = $this->userFactory();
+
         $perPage = 10;
         $request = new Request(['q' => 'TesT']);
 
@@ -38,9 +40,10 @@ class UserSearchTest extends TestCase
         $this->assertSame($item->email, $user->email);
     }
 
-    public function testSearchWithoutData(): void
+    public function test_search_without_data(): void
     {
         $this->userFactory();
+
         $perPage = 10;
         $request = new Request(['q' => '']);
 

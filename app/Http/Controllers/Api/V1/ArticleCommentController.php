@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ArticleComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ArticleCommentController extends Controller
 {
@@ -14,15 +14,14 @@ class ArticleCommentController extends Controller
     {
         $id = $request->input('id');
         $value = $request->input('value');
-        $result = ArticleComment::where('id', '=', $id)
-            ->update(['is_active' => $value]);
+        $result = ArticleComment::query()->where('id', '=', $id)->update(['is_active' => $value]);
 
         return response()->json([
             'status' => $result,
             'id' => $id,
             'value' => $value == 1 ? 0 : 1,
-            'message' => $result ? 'Успешно изменено.' : 'Ошибка сохранения.',
-        ])->setStatusCode(Response::HTTP_OK);
+            'message' => $result ? __('Успешно изменено.') : __('Ошибка сохранения.'),
+        ])->setStatusCode($result ? ResponseAlias::HTTP_OK : ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function deleteComment(Request $request): JsonResponse
@@ -31,8 +30,8 @@ class ArticleCommentController extends Controller
 
         return response()->json([
             'status' => $result,
-            'message' => $result ? 'Успешно удалено.' : 'Ошибка удаления.',
-        ])->setStatusCode(Response::HTTP_OK);
+            'message' => $result ? __('Успешно удалено.') : __('Ошибка удаления.'),
+        ])->setStatusCode($result ? ResponseAlias::HTTP_OK : ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
 }

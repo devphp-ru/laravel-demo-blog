@@ -7,18 +7,24 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
  * Class User
  *
- * @property int $id ID
- * @property string $name Имя
- * @property string $email Email
- * @property string $email_verified_at Подтверждение email
- * @property string $password Пароль
- * @property string $remember_token Токен
- * @property string $is_banned Бан
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $email_verified_at
+ * @property string $password
+ * @property string $remember_token
+ * @property string $is_banned
+ * @property Carbon|null $created_at
+ * @property Carbon|null $update_at
+ *
+ * @method static Builder|User get()
+ * @method static Builder|User create($value)
  *
  * @mixin Builder
  * @package App\Models

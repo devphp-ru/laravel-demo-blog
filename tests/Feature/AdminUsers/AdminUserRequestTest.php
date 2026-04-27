@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\AdminUsers;
 
 use App\Models\AdminUser;
@@ -19,7 +21,7 @@ class AdminUserRequestTest extends TestCase
         $this->actingAs(AdminUser::factory()->create(), 'admin');
     }
 
-    public function testUserValidateWithEmptyFields(): void
+    public function test_user_validate_with_empty_fields(): void
     {
         $this->post($this->routeAdminUsersStore(), [
             'username' => '',
@@ -36,7 +38,7 @@ class AdminUserRequestTest extends TestCase
         $this->assertFalse(session()->hasOldInput('password'));
     }
 
-    public function testUserRegisterIncorrectData(): void
+    public function test_user_register_incorrect_data(): void
     {
         $this->post($this->routeAdminUsersStore(), [
             'username' => 'invalid-name',
@@ -54,7 +56,7 @@ class AdminUserRequestTest extends TestCase
         $this->assertFalse(session()->hasOldInput('password'));
     }
 
-    public function testUserValidateWithExistingEmail(): void
+    public function test_user_validate_with_existing_email(): void
     {
         $this->actingAs(AdminUser::factory()->create([
             'email' => 'test@example.com',

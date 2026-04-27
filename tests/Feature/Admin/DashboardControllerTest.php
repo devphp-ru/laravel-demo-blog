@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
 use App\Models\AdminUser;
@@ -19,16 +21,16 @@ class DashboardControllerTest extends TestCase
         $this->actingAs(AdminUser::factory()->create(), 'admin');
     }
 
-    public function testGetAResponseFromTheIndexPage(): void
+    public function test_get_response_from_the_index_page(): void
     {
         $response = $this->get($this->routeAdminDashboardIndex());
 
         $response->assertStatus(200);
     }
 
-    public function testGetViewDashboardIndex(): void
+    public function test_get_view_dashboard_index(): void
     {
-        $response = $this->get($this->routeAdmindashboardIndex());
+        $response = $this->get($this->routeAdminDashboardIndex());
         $title = 'Панель управления';
 
         $response->assertSuccessful();

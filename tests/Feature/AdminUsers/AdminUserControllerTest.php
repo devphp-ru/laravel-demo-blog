@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\AdminUsers;
 
 use App\Models\AdminUser;
@@ -20,18 +22,18 @@ class AdminUserControllerTest extends TestCase
         $this->actingAs(AdminUser::factory()->create(), 'admin');
     }
 
-    public function testGetAResponseFromAdminUsersIndex(): void
+    public function test_get_response_from_admin_users_index(): void
     {
         $response = $this->get($this->routeAdminUsersIndex());
 
         $response->assertStatus(200);
     }
 
-    public function testGetViewAdminUsersIndex(): void
+    public function test_get_view_admin_users_index(): void
     {
         $title = 'Администраторы';
         $response = $this->get($this->routeAdminUsersIndex());
-        $users = AdminUser::orderByDesc('id')->paginate(10);
+        $users = AdminUser::query()->orderByDesc('id')->paginate(10);
 
         $response->assertSuccessful();
         $response->assertViewIs('admin.admin_users.index');
@@ -41,7 +43,7 @@ class AdminUserControllerTest extends TestCase
         ]);
     }
 
-    public function testGetViewAdminUsersCreate(): void
+    public function test_get_view_admin_users_create(): void
     {
         $title = 'Добавить';
         $response = $this->get($this->routeAdminUsersCreate());
@@ -53,7 +55,7 @@ class AdminUserControllerTest extends TestCase
         ]);
     }
 
-    public function testUserCreate(): void
+    public function test_user_create(): void
     {
         $response = $this->post($this->routeAdminUsersStore(), [
             'username' => 'Test',
@@ -67,6 +69,7 @@ class AdminUserControllerTest extends TestCase
         $response->assertSessionHas([
             'success' => 'Успешно сохранено.',
         ]);
+
         $this->assertDataBaseCount(AdminUser::class, 2);
         $this->assertDatabaseHas(AdminUser::class, [
             'username' => 'Test',
@@ -75,7 +78,7 @@ class AdminUserControllerTest extends TestCase
         ]);
     }
 
-    public function testGetViewAdminUsersEdit(): void
+    public function test_get_view_admin_users_edit(): void
     {
         $item = AdminUser::factory()->create();
         $title = 'Редактировать: ' . $item->username;
@@ -89,7 +92,7 @@ class AdminUserControllerTest extends TestCase
         ]);
     }
 
-    public function testUserUpdate(): void
+    public function test_user_update(): void
     {
         $item = AdminUser::factory()->create([
             'username' => 'Test',
@@ -112,16 +115,18 @@ class AdminUserControllerTest extends TestCase
         $response->assertSessionHas([
             'success' => 'Успешно сохранено.',
         ]);
+
         $this->assertDatabaseCount(AdminUser::class, 2);
         $this->assertDatabaseHas(AdminUser::class,  [
             'username' => 'Admin',
             'email' => 'admim@example.com',
             'is_banned' => 1,
         ]);
+
         $this->assertFalse(Hash::check($item->password, $user->password));
     }
 
-    public function testUserDelete(): void
+    public function test_user_delete(): void
     {
         $item = AdminUser::factory()->create();
 
@@ -132,6 +137,7 @@ class AdminUserControllerTest extends TestCase
         $response->assertSessionHas([
             'success' => 'Успешно удалено.',
         ]);
+
         $this->assertNull($user);
         $this->assertDatabaseCount(AdminUser::class, 1);
     }

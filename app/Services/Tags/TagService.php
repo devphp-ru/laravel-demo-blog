@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Tags;
 
 use App\Http\Requests\TagRequest;
@@ -8,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection as SupportCollection;
 
-final class TagService
+final readonly class TagService
 {
     public function __construct(private TagRepository $tagRepository) {}
 

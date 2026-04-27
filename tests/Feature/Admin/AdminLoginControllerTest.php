@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin;
 
 use App\Models\AdminUser;
@@ -12,14 +14,14 @@ class AdminLoginControllerTest extends TestCase
     use RouteTrait;
     use RefreshDatabase;
 
-    public function testGetAResponseFromLoginForm(): void
+    public function test_get_response_from_login_form(): void
     {
         $response = $this->get($this->routeadminLoginForm());
 
         $response->assertStatus(200);
     }
 
-    public function testGetViewLoginForm(): void
+    public function test_get_view_login_form(): void
     {
         $response = $this->get($this->routeAdminLoginForm());
 
@@ -27,7 +29,7 @@ class AdminLoginControllerTest extends TestCase
         $response->assertViewIs('auth.admin_login_form');
     }
 
-    public function testCanUserLoginWithIncorrectEmail(): void
+    public function test_can_user_login_with_incorrect_email(): void
     {
         $response = $this->from($this->routeAdminLoginForm())->post($this->routeAdminLoginHandler(), [
             'email' => 'invalid-email.ru',
@@ -38,12 +40,13 @@ class AdminLoginControllerTest extends TestCase
         $response->assertSessionHasErrors([
             'email' => 'Значение поля Email должно быть действительным электронным адресом.',
         ]);
+
         $this->assertTrue(session()->hasOldInput('email'));
         $this->assertFalse(session()->hasOldInput('password'));
         $this->assertGuest('admin');
     }
 
-    public function testCanUserLoginWithIncorrectPassword(): void
+    public function test_can_user_login_with_incorrect_password(): void
     {
         $response = $this->from($this->routeAdminLoginForm())->post($this->routeAdminLoginHandler(), [
             'email' => 'test@example.com',
@@ -54,11 +57,12 @@ class AdminLoginControllerTest extends TestCase
         $response->assertSessionHasErrors([
             'error' => 'Неверный логин или пароль.',
         ]);
+
         $this->assertTrue(session()->hasOldInput('email'));
         $this->assertFalse(session()->hasOldInput('password'));
     }
 
-    public function testUserLoginCannotLoginWithEmailThatDoesNotExist(): void
+    public function test_user_login_cannot_login_with_email_that_does_not_exist(): void
     {
         AdminUser::factory()->create();
 
@@ -71,11 +75,12 @@ class AdminLoginControllerTest extends TestCase
         $response->assertSessionHasErrors([
             'error' => 'Неверный логин или пароль.',
         ]);
+
         $this->assertTrue(session()->hasOldInput('email'));
         $this->assertFalse(session()->hasOldInput('password'));
     }
 
-    public function testUserCannotLoginWithIsBanned(): void
+    public function test_user_cannot_login_with_is_banned(): void
     {
         $item = AdminUser::factory()->create([
             'is_banned' => true,
@@ -90,12 +95,13 @@ class AdminLoginControllerTest extends TestCase
         $response->assertSessionHasErrors([
             'error' => 'Доступ запрещен.',
         ]);
+
         $this->assertFalse(session()->hasOldInput('email'));
         $this->assertFalse(session()->hasOldInput('password'));
         $this->assertGuest('admin');
     }
 
-    public function testCanUserLoginWithCorrectCredentials(): void
+    public function test_can_user_login_with_correct_credentials(): void
     {
         $item = AdminUser::factory()->create();
 
@@ -103,6 +109,7 @@ class AdminLoginControllerTest extends TestCase
             'email' => $item->email,
             'password' => '12345j',
         ]);
+
         $user = auth('admin')->user();
 
         $response->assertRedirect($this->routeAdminDashboardIndex());
@@ -111,13 +118,14 @@ class AdminLoginControllerTest extends TestCase
         $response->assertSessionHas([
             'success' => 'Вы вошил в систему.',
         ]);
+
         $this->assertSame($item->id, $user->id);
         $this->assertSame($item->username, $user->username);
         $this->assertSame($item->email, $item->email);
         $this->assertFalse($user->is_banned);
     }
 
-    public function testCanUserLogout(): void
+    public function test_can_user_logout(): void
     {
         $item = AdminUser::factory()->create();
         $this->be($item, 'admin');
@@ -128,6 +136,7 @@ class AdminLoginControllerTest extends TestCase
         $response->assertSessionHas([
             'success' => 'Вы вышил из системы.',
         ]);
+
         $this->assertGuest('admin');
     }
 

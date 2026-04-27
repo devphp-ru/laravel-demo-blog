@@ -7,18 +7,23 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
  * Class AdminUser
  *
- * @property int $id ID
- * @property string $username Имя
- * @property string $email E-mail
- * @property string $password Пароль
- * @property bool $is_banned Бан
- * @property \Illuminate\Support\Carbon|null $created_at Дата создания
- * @property \Illuminate\Support\Carbon|null $updated_at Дата обновления
+ * @property int $id
+ * @property string $username
+ * @property string $email
+ * @property string $password
+ * @property bool $is_banned
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @method static Builder|AdminUser get()
+ * @method static Builder|AdminUser find($value)
+ * @method static Builder|AdminUser create($value)
  *
  * @mixin Builder
  * @package App\Models
@@ -43,4 +48,5 @@ class AdminUser extends Authenticatable
         'password' => 'hashed',
         'is_banned' => 'boolean',
     ];
+
 }

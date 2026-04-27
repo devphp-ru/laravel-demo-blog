@@ -5,22 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Class ArticleComment
  *
- * @property int $id ID
- * @property int $parent_id ID родителя
+ * @property int $id
+ * @property int $parent_id
  * @property int $article_id
- * @property string $username Имя
- * @property string $email Email
- * @property string $comment Комментарий
- * @property bool $is_active Активность
- * @property \Illuminate\Support\Carbon|null $created_at Дата создания
- * @property \Illuminate\Support\Carbon|null $updated_at Дата обновления
+ * @property string $username
+ * @property string $email
+ * @property string $comment
+ * @property bool $is_active
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
- * @property-read \App\Models\ArticleComment $comments Вложенные комментарии
- * @property-read \App\Models\Article $article Статья
+ * @property-read ArticleComment $comments
+ * @property-read Article $article
+ *
+ * @method static Builder|ArticleComment find($value)
  *
  * @mixin Builder
  * @package App\Models

@@ -11,11 +11,11 @@ use Illuminate\View\View;
 
 class UserController extends BaseController
 {
-    public function __construct(private UserService $userService) {}
+    public function __construct(private readonly UserService $userService) {}
 
     public function index(Request $request): View
     {
-        $title = 'Пользователи';
+        $title = __('Пользователи');
 
         $perPage = 10;
         $users = $this->userService->getAllAdminsWithPagination($request, $perPage);
@@ -28,7 +28,7 @@ class UserController extends BaseController
 
     public function create(): View
     {
-        $title = 'Добавить';
+        $title = __('Добавить');
 
         return view('admin.users.create', [
             'title' => $title,
@@ -40,10 +40,10 @@ class UserController extends BaseController
         $result = $this->userService->create($request);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.']);
+            return back()->withErrors(['error' => __('Ошибка сохранения.')]);
         }
 
-        return redirect()->route('users.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('users.index')->with('success', __('Успешно сохранено.'));
     }
 
     public function show(User $user): View
@@ -53,7 +53,7 @@ class UserController extends BaseController
 
     public function edit(User $user): View
     {
-        $title = 'Редактировать: ' . $user->name;
+        $title = __('Редактировать: ' . $user->name);
 
         return view('admin.users.edit', [
             'title' => $title,
@@ -69,10 +69,10 @@ class UserController extends BaseController
         $result = $this->userService->update($request, $user);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.']);
+            return back()->withErrors(['error' => __('Ошибка сохранения.')]);
         }
 
-        return redirect()->route('users.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('users.index')->with('success', __('Успешно сохранено.'));
     }
 
     public function destroy(User $user): RedirectResponse
@@ -80,10 +80,10 @@ class UserController extends BaseController
         $result = $this->userService->destroy($user);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка удаления.']);
+            return back()->withErrors(['error' => __('Ошибка удаления.')]);
         }
 
-        return redirect()->route('users.index')->with('success', 'Успешно удалено.');
+        return redirect()->route('users.index')->with('success', __('Успешно удалено.'));
     }
 
 }

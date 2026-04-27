@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\AdminUsers;
 
 use App\Http\Requests\AdminUserRequest;
@@ -7,7 +9,7 @@ use App\Models\AdminUser;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-final class AdminUserService
+final readonly class AdminUserService
 {
     public function __construct(private AdminUserRepository $adminUserRepository) {}
 

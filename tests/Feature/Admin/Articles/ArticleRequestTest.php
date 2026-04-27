@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Articles;
 
 use App\Models\AdminUser;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -23,7 +24,7 @@ class ArticleRequestTest extends TestCase
         $this->actingAs(AdminUser::factory()->create(), 'admin');
     }
 
-    public function testArticleValidateWithEmptyData(): void
+    public function test_article_validate_with_empty_data(): void
     {
         $this->post(route('articles.store'), [
             'category_id' => '',
@@ -43,7 +44,7 @@ class ArticleRequestTest extends TestCase
         $this->assertFalse(session()->hasOldInput('is_active'));
     }
 
-    public function testArticleValidateWithIncorrectData(): void
+    public function test_article_validate_with_incorrect_data(): void
     {
         $text = Str::repeat('test', 65001);
         $title = Str::repeat('test', 256);
@@ -68,7 +69,7 @@ class ArticleRequestTest extends TestCase
         $this->assertTrue(session()->hasOldInput('is_active'));
     }
 
-    public function testValidateUploadImageExtension(): void
+    public function test_validate_upload_image_extension(): void
     {
         Category::factory(10)->create();
         $item = Article::factory()->create();
@@ -82,6 +83,7 @@ class ArticleRequestTest extends TestCase
         ])->assertInvalid([
             'image' => 'Файл, указанный в поле Изображение, должен быть одного из следующих типов: png, jpeg, jpg, webp.',
         ]);
+
         Storage::delete($item->thumbnail);
 
         $this->assertTrue(session()->hasOldInput('category_id'));
@@ -91,7 +93,7 @@ class ArticleRequestTest extends TestCase
         $this->assertTrue(session()->hasOldInput('is_active'));
     }
 
-    public function testValidateArticleNameExists(): void
+    public function test_validate_article_name_exists(): void
     {
         Category::factory(10)->create();
         $item = Article::factory()->create([
@@ -106,6 +108,7 @@ class ArticleRequestTest extends TestCase
         ])->assertInvalid([
             'title' => 'Такое значение поля Название уже существует.',
         ]);
+
         Storage::delete($item->thumbnail);
 
         $this->assertTrue(session()->hasOldInput('category_id'));
@@ -114,7 +117,7 @@ class ArticleRequestTest extends TestCase
         $this->assertTrue(session()->hasOldInput('is_active'));
     }
 
-    public function testValidateCorrectData(): void
+    public function test_validate_correct_data(): void
     {
         $categories = Category::factory(10)->create();
         $image = UploadedFile::fake()->image('test.jpg');
@@ -132,6 +135,7 @@ class ArticleRequestTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('articles.index'));
         $response->assertSessionHas('success', 'Успешно сохранено.');
+
         $this->assertDatabaseCount(Article::class, 1);
         $this->assertDatabaseHas(Article::class, [
             'category_id' => $categories->first()->id,
@@ -142,6 +146,7 @@ class ArticleRequestTest extends TestCase
             'views' => '10',
             'is_active' => '1',
         ]);
+
         Storage::disk('local')->assertExists($filename);
         Storage::delete($filename);
     }
