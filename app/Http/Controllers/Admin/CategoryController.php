@@ -11,13 +11,13 @@ use Illuminate\View\View;
 
 class CategoryController extends BaseController
 {
-    public function __construct(private CategoryService $categoryService) {}
+    public function __construct(private readonly CategoryService $categoryService) {}
 
     public function index(Request $request): View
     {
         $title = __('Категории');
-        $perPage = 5;
 
+        $perPage = 5;
         $categories = $this->categoryService->getAllAdminsWithPagination($request, $perPage);
 
         return view('admin.categories.index', [
@@ -45,10 +45,10 @@ class CategoryController extends BaseController
         $result = $this->categoryService->create($request);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.']);
+            return back()->withErrors(['error' => __('Ошибка сохранения.')]);
         }
 
-        return redirect()->route('categories.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('categories.index')->with('success', __('Успешно сохранено.'));
     }
 
     public function edit(Category $category): View
@@ -75,10 +75,10 @@ class CategoryController extends BaseController
         $result = $this->categoryService->update($request, $category);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.']);
+            return back()->withErrors(['error' => __('Ошибка сохранения.')]);
         }
 
-        return redirect()->route('categories.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('categories.index')->with('success', __('Успешно сохранено.'));
     }
 
     public function destroy(Category $category): RedirectResponse
@@ -86,10 +86,10 @@ class CategoryController extends BaseController
         $result = $this->categoryService->destroy($category);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка удаления.']);
+            return back()->withErrors(['error' => __('Ошибка удаления.')]);
         }
 
-        return redirect()->route('categories.index')->with('success', 'Успешно удалено.');
+        return redirect()->route('categories.index')->with('success', __('Успешно удалено.'));
     }
 
 }

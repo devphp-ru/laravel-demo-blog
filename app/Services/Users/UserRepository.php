@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Users;
 
 use App\Http\Requests\UserRequest;
@@ -9,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
-final class UserRepository
+final readonly class UserRepository
 {
     public function getAllAdminsWithPagination(
         Request $request,
@@ -31,11 +33,8 @@ final class UserRepository
     ): Builder
     {
         if ($request->filled('q') ) {
-            $query = \trim($request->input('q'));
-            $query = \preg_replace('#[^0-9-a-zA-ZА-Яа-яёЁ@\.]#u', ' ', $query);
-            $query = \preg_replace('#\s+#u', ' ', $query);
-            $query = \mb_strtolower(\trim($query));
-            $like = "%{$query}%";
+            $query = clearSearchBarFromCharacters($request->input('q'));
+            $like = "%$query%";
 
             $builder->orWhere(DB::raw('lower(name)'), 'like', $like);
             $builder->orWhere(DB::raw('lower(email)'), 'like', $like);
@@ -46,7 +45,7 @@ final class UserRepository
 
     public function create(UserRequest $request): ?User
     {
-        $result = User::create($request->only((new User())->getFillable()));
+        $result = User::create($request->only(new User()->getFillable()));
 
         return $result ?? null;
     }

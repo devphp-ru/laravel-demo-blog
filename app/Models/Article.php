@@ -7,24 +7,27 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Class Article
  *
- * @property int $id ID
- * @property int $category_id ID категории
- * @property string $slug ЧПУ
- * @property string $title Название
- * @property string $content Текст
- * @property string $thumbnail Изображение
- * @property int $views Просмотры
- * @property bool $is_active Активность
- * @property \Illuminate\Support\Carbon|null $created_at Дата создания
- * @property \Illuminate\Support\Carbon|null $updated_at Дата обновления
+ * @property int $id
+ * @property int $category_id
+ * @property string $slug
+ * @property string $title
+ * @property string $content
+ * @property string $thumbnail
+ * @property int $views
+ * @property bool $is_active
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
- * @property-read \App\Models\Category $category Категории
- * @property-read \App\Models\Tag $tags Тэги
- * @property-read \App\Models\ArticleComment $comments Комментарии
+ * @property-read Category $category
+ * @property-read Tag $tags
+ * @property-read ArticleComment $comments
+ *
+ * @method static Builder|Article create($value)
  *
  * @mixin Builder
  * @package App\Models

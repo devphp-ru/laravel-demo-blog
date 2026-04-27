@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Categories;
 
 use App\Models\AdminUser;
@@ -7,7 +9,6 @@ use App\Models\Category;
 use App\Services\Categories\CategoryRepository;
 use App\Services\Categories\CategoryService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -26,7 +27,7 @@ class CategoryControllerTest extends TestCase
         $this->categoryService = new CategoryService(new CategoryRepository());
     }
 
-    public function testGetViewCategoriesIndex(): void
+    public function test_get_view_categories(): void
     {
         $title = 'Категории';
         $perPage = 5;
@@ -44,7 +45,7 @@ class CategoryControllerTest extends TestCase
         ]);
     }
 
-    public function testGetViewCategoriesCreate(): void
+    public function test_get_view_create_category(): void
     {
         $title = 'Добавить';
 
@@ -53,13 +54,13 @@ class CategoryControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('admin.categories.create');
-        $response->assertViewhas([
+        $response->assertViewHas([
             'title' => $title,
             'categories' => $categories,
         ]);
     }
 
-    public function testCanCategoryCreate(): void
+    public function test_can_create_category(): void
     {
         $response = $this->post(route('categories.store'), [
             'parent_id' => '0',
@@ -71,6 +72,7 @@ class CategoryControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('categories.index'));
         $response->assertSessionHas('success', 'Успешно сохранено.');
+
         $this->assertDatabaseCount(Category::class, 1);
         $this->assertDatabaseHas(Category::class, [
             'parent_id' => '0',
@@ -81,7 +83,7 @@ class CategoryControllerTest extends TestCase
         ]);
     }
 
-    public function testGetViewCategoryEdit(): void
+    public function test_get_view_edit_category(): void
     {
         $item = Category::factory()->create();
         $title = 'Редактировать: ' . $item->name;
@@ -98,7 +100,7 @@ class CategoryControllerTest extends TestCase
         ]);
     }
 
-    public function testCanCategoryUpdate(): void
+    public function test_can_update_category(): void
     {
         $item = Category::factory()->create();
 
@@ -112,6 +114,7 @@ class CategoryControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('categories.index'));
         $response->assertSessionHas('success', 'Успешно сохранено.');
+
         $this->assertDatabaseCount(Category::class, 1);
         $this->assertDatabaseHas(Category::class, [
             'parent_id' => '0',
@@ -122,7 +125,7 @@ class CategoryControllerTest extends TestCase
         ]);
     }
 
-    public function testCanCategoryDelete(): void
+    public function test_can_delete_category(): void
     {
         $this->categoriesFactory();
         $item = Category::factory()->create();
@@ -132,6 +135,7 @@ class CategoryControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('categories.index'));
         $response->assertSessionHas('success', 'Успешно удалено.');
+
         $this->assertDatabaseCount(Category::class, 10);
     }
 

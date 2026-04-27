@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 class RouteAdminServiceProvider extends ServiceProvider
 {
-    public const HOME = '/';
+    public const string HOME = '/';
 
     public function boot(): void
     {

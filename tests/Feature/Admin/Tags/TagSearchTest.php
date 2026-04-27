@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Tags;
 
 use App\Models\AdminUser;
@@ -7,7 +9,6 @@ use App\Models\Tag;
 use App\Services\Tags\TagRepository;
 use App\Services\Tags\TagService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -26,13 +27,14 @@ class TagSearchTest extends TestCase
         $this->tagService = new TagService(new TagRepository());
     }
 
-    public function testSearchCategoriesToName(): void
+    public function test_search_category_to_name(): void
     {
         $this->tagFactory();
         $item = Tag::factory()->create([
             'slug' => Str::slug('Test tag'),
             'name' => 'Test tag',
         ]);
+
         $perPage = 10;
         $request = new Request(['q' => 'Tag']);
 
@@ -46,10 +48,11 @@ class TagSearchTest extends TestCase
         $this->assertSame($item->slug, $tag->slug);
     }
 
-    public function testSearchWithoutData(): void
+    public function test_search_without_data(): void
     {
-        $perPage = 10;
         $this->tagFactory();
+
+        $perPage = 10;
         $request = new Request(['q' => '']);
 
         $response = $this->get(route('tags.index'));

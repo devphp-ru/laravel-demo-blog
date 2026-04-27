@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Articles;
 
 use App\Models\AdminUser;
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\Tag;
 use App\Services\Articles\ArticleRepository;
 use App\Services\Articles\ArticleService;
 use App\Services\Categories\CategoryRepository;
@@ -14,7 +15,6 @@ use App\Services\Tags\TagRepository;
 use App\Services\Tags\TagService;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -39,10 +39,11 @@ class ArticleControllerTest extends TestCase
         $this->tagService = new TagService(new TagRepository());
     }
 
-    public function testGetViewCategoriesIndex(): void
+    public function test_get_view_article(): void
     {
         Category::factory(10)->create();
         Article::factory(20)->create();
+
         $title = 'Статьи';
         $perPage = 10;
         $request = new Request();
@@ -57,10 +58,10 @@ class ArticleControllerTest extends TestCase
             'paginator' => $articles,
         ]);
 
-        (new Filesystem())->cleanDirectory('public/uploads/dev_articles');
+        new Filesystem()->cleanDirectory('public/uploads/dev_articles');
     }
 
-    public function testGetViewCreateArticle(): void
+    public function test_get_view_create_article(): void
     {
         Category::factory(10)->create();
         $title = 'Добавить';
@@ -78,7 +79,7 @@ class ArticleControllerTest extends TestCase
         ]);
     }
 
-    public function testCanCreateArticle(): void
+    public function test_can_create_article(): void
     {
         $categories = Category::factory(10)->create();
         $image = UploadedFile::fake()->image('test.jpg');
@@ -94,6 +95,7 @@ class ArticleControllerTest extends TestCase
             'is_active' => '1',
             'tags' => [1, 2, 3],
         ]);
+
         Storage::delete($filename);
 
         $response->assertStatus(302);
@@ -109,10 +111,11 @@ class ArticleControllerTest extends TestCase
             'views' => '0',
             'is_active' => '1',
         ]);
-        $this->assertDAtabaseCount('article_tag', 3);
+
+        $this->assertDatabaseCount('article_tag', 3);
     }
 
-    public function testGetViewArticlesEdit(): void
+    public function test_get_view_article_to_edit(): void
     {
         Category::factory(10)->create();
         $item = Article::factory()->create();
@@ -121,6 +124,7 @@ class ArticleControllerTest extends TestCase
         $response = $this->get(route('articles.edit', $item));
         $categories = $this->categoryService->getForSelect();
         $tags = $this->tagService->getForSelect();
+
         Storage::delete($item->thumbnail);
 
         $response->assertStatus(200);
@@ -133,7 +137,7 @@ class ArticleControllerTest extends TestCase
         ]);
     }
 
-    public function testCanUpdateArticle(): void
+    public function test_can_update_article(): void
     {
         $categories = Category::factory(10)->create();
         $categoryId = $categories->last()->id;
@@ -152,12 +156,14 @@ class ArticleControllerTest extends TestCase
             'is_active' => '0',
             'tags' => [1],
         ]);
+
         Storage::delete($item->thumbnail);
         Storage::delete($filename);
 
         $response->assertStatus(302);
         $response->assertRedirect(route('articles.index'));
         $response->assertSessionHas('success', 'Успешно сохранено.');
+
         $this->assertDatabaseCount(Article::class, 1);
         $this->assertDatabaseHas(Article::class, [
             'category_id' => $categoryId,
@@ -168,10 +174,11 @@ class ArticleControllerTest extends TestCase
             'views' => '100',
             'is_active' => '0',
         ]);
-        $this->assertDAtabaseCount('article_tag', 1);
+
+        $this->assertDatabaseCount('article_tag', 1);
     }
 
-    public function testCanDeleteArticle(): void
+    public function test_can_delete_article(): void
     {
         Category::factory(10)->create();
         $item = Article::factory()->create();
@@ -182,8 +189,9 @@ class ArticleControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('articles.index'));
         $response->assertSessionHas('success', 'Успешно удалено.');
+
         $this->assertDatabaseCount(Article::class, 0);
-        $this->assertDAtabaseCount('article_tag', 0);
+        $this->assertDatabaseCount('article_tag', 0);
     }
 
 }

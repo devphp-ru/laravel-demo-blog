@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Categories;
 
 use App\Models\AdminUser;
@@ -7,7 +9,6 @@ use App\Models\Category;
 use App\Services\Categories\CategoryRepository;
 use App\Services\Categories\CategoryService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 
@@ -25,12 +26,13 @@ class CategorySearchTest extends TestCase
         $this->categoryService = new CategoryService(new CategoryRepository());
     }
 
-    public function testSearchCategoriesToName(): void
+    public function test_search_categories_to_name(): void
     {
         $this->categoriesFactory();
         $item = Category::factory()->create([
             'name' => 'Test category',
         ]);
+
         $perPage = 10;
         $request = new Request(['q' => 'TesT']);
 
@@ -44,9 +46,10 @@ class CategorySearchTest extends TestCase
         $this->assertSame($item->name, $category->name);
     }
 
-    public function testSearchWithoutData(): void
+    public function test_search_without_data(): void
     {
         $this->categoriesFactory();
+
         $perPage = 10;
         $request = new Request(['q' => '']);
 
@@ -62,5 +65,5 @@ class CategorySearchTest extends TestCase
     {
         Category::factory(25)->create();
     }
-    
+
 }

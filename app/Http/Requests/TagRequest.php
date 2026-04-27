@@ -16,7 +16,7 @@ class TagRequest extends FormRequest
         $id = $this->tag?->id;
 
         return [
-            'name' => 'bail|required|string|min:1|max:255|regex:#^[А-ЯЁёа-яA-Za-z0-9- ]+$#u|unique:tags,name,' . $id,
+            'name' => 'bail|required|string|min:1|max:50|regex:#^[А-ЯЁёа-яA-Za-z0-9- ]+$#u|unique:tags,name,' . $id,
             'content' => 'bail|nullable|string|min:1|max:65000',
             'is_active' => 'bail|gte:0',
         ];

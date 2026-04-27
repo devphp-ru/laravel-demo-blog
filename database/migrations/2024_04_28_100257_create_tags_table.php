@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id()->comment('ID');
             $table->string('slug')->unique()->index()->comment('ЧПУ');
-            $table->string('name')->unique()->comment('Название');
+            $table->string('name', 50)->unique()->comment('Название');
             $table->text('content')->nullable()->comment('Описание');
             $table->boolean('is_active')->default(true)->comment('Активность');
             $table->timestamps();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Users;
 
 use App\Models\AdminUser;
@@ -7,7 +9,6 @@ use App\Models\User;
 use App\Services\Users\UserRepository;
 use App\Services\Users\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -26,11 +27,12 @@ class UserControllerTest extends TestCase
         $this->userService = new UserService(new UserRepository());
     }
 
-    public function testGetViewUsersIndex(): void
+    public function test_get_view_users(): void
     {
         User::factory(25)->create();
-        $title = 'Пользователи';
+
         $perPage = 10;
+        $title = 'Пользователи';
         $request = new Request();
 
         $response = $this->get(route('users.index'));
@@ -44,7 +46,7 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    public function testGetViewUsersCreate(): void
+    public function test_get_view_create_user(): void
     {
         $title = 'Добавить';
 
@@ -57,7 +59,7 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    public function testCanUserCreate(): void
+    public function test_can_create_user(): void
     {
         $response = $this->post(route('users.store'), [
             'name' => 'Test Test',
@@ -71,6 +73,7 @@ class UserControllerTest extends TestCase
         $response->assertSessionHas([
             'success' => 'Успешно сохранено.',
         ]);
+
         $this->assertDatabaseCount(User::class, 1);
         $this->assertDatabaseHas(User::class, [
             'name' => 'Test Test',
@@ -79,7 +82,7 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    public function testGetViewUserEdit(): void
+    public function test_get_view_edit_user(): void
     {
         $item = User::factory()->create();
         $title = 'Редактировать: ' . $item->name;
@@ -93,7 +96,7 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    public function testCanUserUpdate(): void
+    public function test_can_update_user(): void
     {
         $item = User::factory()->create();
 
@@ -106,15 +109,17 @@ class UserControllerTest extends TestCase
 
         $response->assertRedirect(route('users.index'));
         $response->assertSessionHas('success', 'Успешно сохранено.');
+
         $this->assertDatabaseHas(User::class, [
             'name' => 'Test Test',
             'email' => 'test@example.com',
             'is_banned' => '1',
         ]);
+
         $this->assertTrue(Hash::check('12345j', $user->password));
     }
 
-    public function testCanUserDelete(): void
+    public function test_can_delete_user(): void
     {
         $item = User::factory()->create();
 
@@ -123,6 +128,7 @@ class UserControllerTest extends TestCase
 
         $response->assertRedirect(route('users.index'));
         $response->assertSessionHas('success', 'Успешно удалено.');
+
         $this->assertDatabaseCount(User::class, 0);
         $this->assertTrue($users->isEmpty());
     }

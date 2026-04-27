@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\AdminUsers;
 
 use App\Models\AdminUser;
@@ -25,7 +27,7 @@ class AdminUserSearchTest extends TestCase
         $this->adminUserService = new AdminUserService(new AdminUserRepository());
     }
 
-    public function testSearchUserToName(): void
+    public function test_search_user_to_name(): void
     {
         $this->createAdminUsers(15);
         $item = AdminUser::factory()->create([
@@ -43,15 +45,15 @@ class AdminUserSearchTest extends TestCase
         $this->assertSame($item->email, $user->email);
     }
 
-    public function testSearchUserToEmail(): void
+    public function test_search_user_to_email(): void
     {
         $this->createAdminUsers(15);
         $item = AdminUser::factory()->create([
             'username' => 'Test',
-            'email' => 'TesT@example.com',
+            'email' => 'test@example.com',
         ]);
         $perPage = 10;
-        $request = new Request(['q' => 'Test@example.com']);
+        $request = new Request(['q' => 'TeSt@exaMple.com']);
 
         $users = $this->adminUserService->getAllAdminsWithPagination($request, $perPage);
         $user = $users->first();
@@ -61,7 +63,7 @@ class AdminUserSearchTest extends TestCase
         $this->assertSame($item->email, $user->email);
     }
 
-    public function testSearchUserToNameAndEmail(): void
+    public function test_search_user_to_name_and_email(): void
     {
         $this->createAdminUsers(15);
         $item = AdminUser::factory()->create([

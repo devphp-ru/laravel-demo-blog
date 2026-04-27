@@ -4,21 +4,23 @@ namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 /**
  * Class Category
  *
- * @property int $id ID
- * @property int $parent_id ID родителя
- * @property string $slug ЧПУ
- * @property string $name Название
- * @property string $content Описание
- * @property bool $is_active Активность
- * @property \Illuminate\Support\Carbon|null $created_at Дата создания
- * @property \Illuminate\Support\Carbon|null $update_at Дата обновления
+ * @property int $id
+ * @property int $parent_id
+ * @property string $slug
+ * @property string $name
+ * @property string $content
+ * @property bool $is_active
+ * @property Carbon|null $created_at
+ * @property Carbon|null $update_at
+ *
+ * @method static Builder|Category create($value)
  *
  * @mixin Builder
  * @package App\Models

@@ -11,11 +11,11 @@ use Illuminate\View\View;
 
 class AdminUserController extends BaseController
 {
-    public function __construct(private AdminUserService $adminUserService) {}
+    public function __construct(private readonly AdminUserService $adminUserService) {}
 
     public function index(Request $request): View
     {
-        $title = 'Администраторы';
+        $title = __('Администраторы');
 
         $perPage = 10;
         $users = $this->adminUserService->getAllAdminsWithPagination($request, $perPage);
@@ -28,7 +28,7 @@ class AdminUserController extends BaseController
 
     public function create(): View
     {
-        $title = 'Добавить';
+        $title = __('Добавить');
 
         return view('admin.admin_users.create', [
             'title' => $title,
@@ -40,15 +40,15 @@ class AdminUserController extends BaseController
         $result = $this->adminUserService->create($request);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.'])->onlyInput('username', 'email');
+            return back()->withErrors(['error' => __('Ошибка сохранения.')])->onlyInput('username', 'email');
         }
 
-        return redirect()->route('admin-users.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('admin-users.index')->with('success', __('Успешно сохранено.'));
     }
 
     public function edit(AdminUser $adminUser): View
     {
-        $title = 'Редактировать: ' . $adminUser->username;
+        $title = __('Редактировать: ' . $adminUser->username);
 
         return view('admin.admin_users.edit', [
             'title' => $title,
@@ -64,10 +64,10 @@ class AdminUserController extends BaseController
         $result = $this->adminUserService->update($request, $adminUser);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.'])->onlyInput('username', 'email');
+            return back()->withErrors(['error' => __('Ошибка сохранения.')])->onlyInput('username', 'email');
         }
 
-        return redirect()->route('admin-users.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('admin-users.index')->with('success', __('Успешно сохранено.'));
     }
 
     public function destroy(AdminUser $adminUser): RedirectResponse
@@ -75,10 +75,10 @@ class AdminUserController extends BaseController
         $result = $this->adminUserService->destroy($adminUser);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка удаления.']);
+            return back()->withErrors(['error' => __('Ошибка удаления.')]);
         }
 
-        return redirect()->route('admin-users.index')->with('success', 'Успешно удалено.');
+        return redirect()->route('admin-users.index')->with('success', __('Успешно удалено.'));
     }
 
 }

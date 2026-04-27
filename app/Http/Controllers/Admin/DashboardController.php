@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\ArticleComment;
 use App\Services\ArticleComments\ArticleCommentService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -11,7 +10,7 @@ class DashboardController extends BaseController
 {
     public function index(): View
     {
-        $title = 'Панель управления';
+        $title = __('Панель управления');
 
         return view('admin.dashboards.index', [
             'title' => $title,
@@ -23,7 +22,7 @@ class DashboardController extends BaseController
         ArticleCommentService $articleCommentService,
     ): View
     {
-        $title = 'Комментарии статей';
+        $title = __('Комментарии к статьям');
 
         $perPage = 10;
         $articleComments = $articleCommentService->getAllAdminsWithPagination($request, $perPage);

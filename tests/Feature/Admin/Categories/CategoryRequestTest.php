@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Categories;
 
 use App\Models\AdminUser;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -20,14 +21,12 @@ class CategoryRequestTest extends TestCase
         $this->actingAs(AdminUser::factory()->create(), 'admin');
     }
 
-    public function testCategoryValidateWithEmptyFields(): void
+    public function test_validate_category_with_empty_fields(): void
     {
-        $text = str_repeat('test test test', 65001);
-
         $this->post(route('categories.store'), [
             'parent_id' => '',
             'name' => '',
-            'content' => $text,
+            'content' => Str::random(65001),
             'is_active' => '',
         ])->assertInvalid([
             'parent_id' => 'Количество символов в поле Категории должно быть 0 или больше.',
@@ -42,14 +41,12 @@ class CategoryRequestTest extends TestCase
         $this->assertFalse(session()->hasOldInput('is_active'));
     }
 
-    public function testCategoryValidateIncorrectData(): void
+    public function test_validate_category_incorrect_data(): void
     {
-        $text = str_repeat('test test test', 65001);
-
         $this->post(route('categories.store'), [
             'parent_id' => 'test',
             'name' => '!test@',
-            'content' => $text,
+            'content' => Str::random(65001),
             'is_active' => '!!!0',
         ])->assertInvalid([
             'parent_id' => 'Количество символов в поле Категории должно быть 0 или больше.',
@@ -64,7 +61,7 @@ class CategoryRequestTest extends TestCase
         $this->assertTrue(session()->hasOldInput('is_active'));
     }
 
-    public function testCategoryValidateWithExistsName(): void
+    public function test_validate_category_with_exists_name(): void
     {
         $item = Category::factory()->create();
 
@@ -83,7 +80,7 @@ class CategoryRequestTest extends TestCase
         $this->assertTrue(session()->hasOldInput('is_active'));
     }
 
-    public function testValidateCorrectData(): void
+    public function test_validate_correct_data(): void
     {
         $response = $this->post(route('categories.store', [
             'parent_id' => '0',
@@ -94,6 +91,7 @@ class CategoryRequestTest extends TestCase
 
         $response->assertRedirect(route('categories.index'));
         $response->assertSessionHas('success', 'Успешно сохранено.');
+
         $this->assertDatabaseCount(Category::class, 1);
         $this->assertDatabaseHas(Category::class, [
             'parent_id' => '0',

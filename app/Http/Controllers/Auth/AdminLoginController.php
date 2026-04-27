@@ -17,23 +17,23 @@ class AdminLoginController extends Controller
     public function login(AdminLoginRequest $request): RedirectResponse
     {
         if (!auth('admin')->attempt($request->validated())) {
-            return back()->withErrors(['error' => 'Неверный логин или пароль.'])->onlyInput('email');
+            return back()->withErrors(['error' => __('Неверный логин или пароль.')])->onlyInput('email');
         }
 
         if (auth('admin')->user()->is_banned) {
             auth('admin')->logout();
 
-            return back()->withErrors(['error' => 'Доступ запрещен.']);
+            return back()->withErrors(['error' => __('Доступ запрещен.')]);
         }
 
-        return redirect()->route('admin.dashboard.index')->with('success', 'Вы вошил в систему.');
+        return redirect()->route('admin.dashboard.index')->with('success', __('Вы вошил в систему.'));
     }
 
     public function logout(): RedirectResponse
     {
         auth('admin')->logout();
 
-        return redirect()->route('admin.login.form')->with('success', 'Вы вышил из системы.');
+        return redirect()->route('admin.login.form')->with('success', __('Вы вышил из системы.'));
     }
 
 }

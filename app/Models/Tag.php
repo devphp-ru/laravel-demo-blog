@@ -4,17 +4,20 @@ namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * Class Tag
  *
- * @property int $id ID
- * @property string $slug ЧПУ
- * @property string $name Название
- * @property string $content Описание
- * @property bool $is_active Активность
- * @property \Illuminate\Support\Carbon|null $created_at Дата создания
- * @property \Illuminate\Support\Carbon|null $updated_at Дата обновления
+ * @property int $id
+ * @property string $slug
+ * @property string $name
+ * @property string $content
+ * @property bool $is_active
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @method static Builder|Tag create($value)
  *
  * @mixin Builder
  * @package App\Models

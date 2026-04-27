@@ -13,11 +13,12 @@ use Illuminate\View\View;
 
 class ArticleController extends BaseController
 {
-    public function __construct(private ArticleService $articleService) {}
+    public function __construct(private readonly ArticleService $articleService) {}
 
     public function index(Request $request): View
     {
-        $title = 'Статьи';
+        $title = __('Статьи');
+
         $perPage = 10;
         $articles = $this->articleService->getAllAdminsWithPagination($request, $perPage);
 
@@ -32,7 +33,7 @@ class ArticleController extends BaseController
         TagService $tagService,
     ): View
     {
-        $title = 'Добавить';
+        $title = __('Добавить');
 
         $categories = $categoryService->getForSelect();
         $tags = $tagService->getForSelect();
@@ -49,10 +50,10 @@ class ArticleController extends BaseController
         $result = $this->articleService->create($request);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.']);
+            return back()->withErrors(['error' => __('Ошибка сохранения.')]);
         }
 
-        return redirect()->route('articles.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('articles.index')->with('success', __('Успешно сохранено.'));
     }
 
     public function show(Article $article): View
@@ -66,7 +67,7 @@ class ArticleController extends BaseController
         TagService $tagService,
     ): View
     {
-        $title = 'Редактировать: ' . $article->title;
+        $title = __('Редактировать: ' . $article->title);
 
         $categories = $categoryService->getForSelect();
         $tags = $tagService->getForSelect();
@@ -87,10 +88,10 @@ class ArticleController extends BaseController
         $result = $this->articleService->update($request, $article);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка сохранения.']);
+            return back()->withErrors(['error' => __('Ошибка сохранения.')]);
         }
 
-        return redirect()->route('articles.index')->with('success', 'Успешно сохранено.');
+        return redirect()->route('articles.index')->with('success', __('Успешно сохранено.'));
     }
 
     public function destroy(Article $article): RedirectResponse
@@ -98,10 +99,10 @@ class ArticleController extends BaseController
         $result = $this->articleService->destroy($article);
 
         if (!$result) {
-            return back()->withErrors(['error' => 'Ошибка удаления.']);
+            return back()->withErrors(['error' => __('Ошибка удаления.')]);
         }
 
-        return redirect()->route('articles.index')->with('success', 'Успешно удалено.');
+        return redirect()->route('articles.index')->with('success', __('Успешно удалено.'));
     }
 
 }

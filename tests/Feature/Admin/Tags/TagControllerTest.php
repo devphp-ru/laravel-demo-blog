@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Tags;
 
 use App\Models\AdminUser;
@@ -7,7 +9,6 @@ use App\Models\Tag;
 use App\Services\Tags\TagRepository;
 use App\Services\Tags\TagService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -26,11 +27,13 @@ class TagControllerTest extends TestCase
         $this->tagService = new TagService(new TagRepository());
     }
 
-    public function testGetViewTagsIndex(): void
+    public function test_get_view_tags(): void
     {
+        Tag::factory(15)->create();
+
         $title = 'Тэги';
         $perPage = 10;
-        Tag::factory(15)->create();
+
         $request = new Request();
 
         $response = $this->get(route('tags.index'));
@@ -44,7 +47,7 @@ class TagControllerTest extends TestCase
         ]);
     }
 
-    public function testGetViewTagsCreate(): void
+    public function test_get_view_create_tag(): void
     {
         $title = 'Добавить';
 
@@ -57,7 +60,7 @@ class TagControllerTest extends TestCase
         ]);
     }
 
-    public function testCanCreateCategory(): void
+    public function test_can_create_tag(): void
     {
         $response = $this->post(route('tags.store'), [
             'name' => 'Test tag',
@@ -68,6 +71,7 @@ class TagControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('tags.index'));
         $response->assertSessionHas('success', 'Успешно сохранено.');
+
         $this->assertDatabaseCount(Tag::class, 1);
         $this->assertDatabaseHas(Tag::class, [
             'slug' => Str::slug('test tag'),
@@ -77,9 +81,10 @@ class TagControllerTest extends TestCase
         ]);
     }
 
-    public function testGetViewTagsEdit(): void
+    public function test_get_view_edit_tag(): void
     {
         $item = Tag::factory()->create();
+
         $title = 'Редактировать: ' . $item->name;
 
         $response = $this->get(route('tags.edit', $item));
@@ -92,7 +97,7 @@ class TagControllerTest extends TestCase
         ]);
     }
 
-    public function testCanUpdateTag(): void
+    public function test_can_update_tag(): void
     {
         $item = Tag::factory()->create();
 
@@ -105,6 +110,7 @@ class TagControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('tags.index'));
         $response->assertSessionHas('success', 'Успешно сохранено.');
+
         $this->assertDatabaseCount(Tag::class, 1);
         $this->assertDatabaseHas(Tag::class, [
             'slug' => Str::slug('New name tag'),
@@ -112,6 +118,19 @@ class TagControllerTest extends TestCase
             'content' => 'Tag content',
             'is_active' => '0',
         ]);
+    }
+
+    public function test_can_delete_tag(): void
+    {
+        $item = Tag::factory()->create();
+
+        $response = $this->delete(route('tags.destroy', $item));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('tags.index'));
+        $response->assertSessionHas('success', 'Успешно удалено.');
+
+        $this->assertDatabaseCount(Tag::class, 0);
     }
 
 }
