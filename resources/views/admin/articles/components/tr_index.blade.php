@@ -5,7 +5,18 @@
     <td><a href="{{ route('articles.edit', $value) }}">{{ $value->title }}</a></td>
     <td>{{ $value->views }}</td>
     <td>{{ $value->comments->count() }}</td>
-    <td>{{ $value->is_active ? 'да' : 'нет' }}</td>
+    <td
+        id="td{{ $value->id }}"
+        data-id="{{ $value->id }}"
+        data-table="articles"
+        data-field="is_active"
+        data-value="{{ $value->is_active ? 0 : 1 }}"
+        class="change-status"
+        style="cursor:pointer"
+        title="Изменить статус"
+    >
+        {{ $value->is_active ? 'да' : 'нет' }}
+    </td>
     <td>
         <a href="{{ route('articles.edit', $value) }}" type="button" class="btn btn-block btn-primary btn-flat">Редактировать</a>
         <form action="{{ route('articles.destroy', $value) }}" method="post">

@@ -84,3 +84,6 @@
         </div>
     </div>
 @endsection
+@push('script_js')
+    <script src="{{ asset('/assets/admin/js/script.js') }}"></script>
+@endpush

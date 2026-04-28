@@ -3,7 +3,18 @@
     <td>{{ $value->created_at->format('d.m.Y H:s') }}</td>
     <td><a href="{{ route('admin-users.edit', $value) }}">{{ $value->username }}</a></td>
     <td>{{ $value->email }}</td>
-    <td>{{ $value->is_banned ? 'да' : 'нет' }}</td>
+    <td
+        id="td{{ $value->id }}"
+        data-id="{{ $value->id }}"
+        data-table="admin_users"
+        data-field="is_banned"
+        data-value="{{ $value->is_banned ? 0 : 1 }}"
+        class="change-status"
+        style="cursor:pointer"
+        title="Изменить статус"
+    >
+        {{ $value->is_banned ? 'да' : 'нет' }}
+    </td>
     <td>
         <a href="{{ route('admin-users.edit', $value) }}" type="button" class="btn btn-block btn-primary btn-flat">Редактировать</a>
         <form action="{{ route('admin-users.destroy', $value) }}" method="post">

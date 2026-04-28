@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ChangeStatusController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ArticleCommentController;
 
@@ -14,5 +15,5 @@ use App\Http\Controllers\Api\V1\ArticleCommentController;
 |
 */
 
-Route::put('/change-status', [ArticleCommentController::class, 'changeStatus']);
+Route::put('/change-status', ChangeStatusController::class);
 Route::delete('/delete-comment', [ArticleCommentController::class, 'deleteComment']);
