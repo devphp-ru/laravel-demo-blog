@@ -31,25 +31,27 @@ $(() => {
         }
     });
 
-    $(document).on(`click`, `.change-value`, function () {
+    $(document).on(`click`, `.change-status`, function () {
         const id = parseInt($(this).data(`id`));
+        const table = $(this).data(`table`);
+        const field = $(this).data(`field`);
         const value = parseInt($(this).data(`value`));
-        console.log('>>>', id, value);
         if (!isNaN(id) && (id > 0)) {
             $.ajax({
                 url: `/api/v1/change-status`,
-                method: 'PUT',
+                method: `put`,
                 dataType: `json`,
                 cache: false,
-                data: {id, value},
+                data: {id, table, field, value},
                 success: function (data) {
-                   if (!data.status) {
-
+                   if (data.status === `error`) {
+                       alert(`Ошибка сохранения.`);
                    } else {
-                       const commId = $(`#com${id}`);
-                       commId.removeData(`value`);
-                       commId.text(data.value === 1 ? `нет` : `да`);
-                       commId.attr(`data-value`, data.value);
+                       const td = $(`#td${id}`);
+                       td.removeData(`value`);
+                       td.text(data.value === 1 ? `нет` : `да`);
+                       td.attr(`data-value`, data.value);
+                       alert('Успешно изменено.');
                    }
                 }
             });
