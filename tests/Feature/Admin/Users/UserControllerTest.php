@@ -40,9 +40,24 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('admin.users.index');
-        $response->assertViewhas([
+        $response->assertViewHas([
             'title' => $title,
             'paginator' => $users,
+        ]);
+    }
+
+    public function test_get_view_show_user(): void
+    {
+        $user = User::factory()->create();
+        $title = 'Профиль пользователя';
+
+        $response = $this->get(route('users.show', $user));
+
+        $response->assertStatus(200);
+        $response->assertViewIs('admin.users.show');
+        $response->assertViewHas([
+            'title' => $title,
+            'user' => $user,
         ]);
     }
 

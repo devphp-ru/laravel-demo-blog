@@ -48,7 +48,14 @@ class UserController extends BaseController
 
     public function show(User $user): View
     {
-        abort(404);
+        $title = __('Профиль пользователя');
+
+        $user->load(['articles', 'articleComments']);
+
+        return view('admin.users.show', [
+            'title' => $title,
+           'user' => $user,
+        ]);
     }
 
     public function edit(User $user): View
