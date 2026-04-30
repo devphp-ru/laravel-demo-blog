@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id()->comment('ID');
-            $table->foreignId('category_id')->unsigned()->index()->comment('ID категории');
+            $table->foreignId('user_id')->comment('ID пользователя')->constrained();
+            $table->foreignId('category_id')->comment('ID категории')->references('id')->on('categories');
             $table->string('slug')->unique()->index()->comment('ЧПУ');
             $table->string('title')->unique()->comment('Название');
             $table->text('content')->comment('Текс');

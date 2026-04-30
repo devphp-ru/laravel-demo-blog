@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         Category::factory(10)->create();
         Tag::factory(15)->create();
         Article::factory(89)->create();
-        ArticleComment::factory(57)->create();
+        ArticleComment::factory(123)->create();
     }
 
 }

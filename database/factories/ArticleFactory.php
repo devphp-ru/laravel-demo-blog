@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,9 +26,12 @@ class ArticleFactory extends Factory
         $category = Category::whereNotIn('id', [1, 2, 3])->inRandomOrder()->first();
         $date = \date('Y-m-d H:i:s', \strtotime('-1 years +1 month'));
         $newDate = \date('Y-m-d H:i:s', \strtotime($date . "+{$i} day"));
+        $userId = User::inRandomOrder()->first()->id;
+
         $i++;
 
         return [
+            'user_id' => $userId,
             'category_id' => $category->id,
             'slug' => Str::slug($title),
             'title' => ucfirst($title),
