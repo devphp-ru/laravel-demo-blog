@@ -33,6 +33,11 @@ trait RouteTrait
         return route('admin-users.index');
     }
 
+    public function routeAdminUsersShow(AdminUser $item): string
+    {
+        return route('admin-users.show', $item);
+    }
+
     public function routeAdminUsersCreate(): string
     {
         return route('admin-users.create');

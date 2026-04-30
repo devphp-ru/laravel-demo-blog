@@ -23,7 +23,10 @@ final readonly class AdminUserRepository
         int $perPage,
     ): LengthAwarePaginator
     {
-        $builder = AdminUser::query();
+        $builder = AdminUser::query()->with([
+            'articles',
+            'articleComments',
+        ]);
         $builder = $this->adminSearch($request, $builder);
 
         return $builder

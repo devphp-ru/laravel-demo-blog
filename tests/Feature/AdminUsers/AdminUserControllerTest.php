@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Tests\Feature\AdminUsers;
 
 use App\Models\AdminUser;
+use App\Services\AdminUsers\AdminUserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Tests\Traits\RouteTrait;
@@ -15,11 +17,14 @@ class AdminUserControllerTest extends TestCase
     use RouteTrait;
     use RefreshDatabase;
 
+    public AdminUserService $adminUserService;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->actingAs(AdminUser::factory()->create(), 'admin');
+        $this->adminUserService = app()->make(AdminUserService::class);
     }
 
     public function test_get_response_from_admin_users_index(): void
@@ -31,15 +36,33 @@ class AdminUserControllerTest extends TestCase
 
     public function test_get_view_admin_users_index(): void
     {
+        $perPage = 10;
         $title = 'Администраторы';
+        $request = new Request();
+
         $response = $this->get($this->routeAdminUsersIndex());
-        $users = AdminUser::query()->orderByDesc('id')->paginate(10);
+        $users = $this->adminUserService->getAllAdminsWithPagination($request, $perPage);
 
         $response->assertSuccessful();
         $response->assertViewIs('admin.admin_users.index');
         $response->assertViewHasAll([
             'title' => $title,
             'paginator' => $users,
+        ]);
+    }
+
+    public function test_get_view_show_user(): void
+    {
+        $user = AdminUser::factory()->create();
+        $title = 'Профиль администратора';
+
+        $response = $this->get($this->routeAdminUsersShow($user));
+
+        $response->assertStatus(200);
+        $response->assertViewIs('admin.admin_users.show');
+        $response->assertViewHas([
+            'title' => $title,
+            'user' => $user,
         ]);
     }
 
