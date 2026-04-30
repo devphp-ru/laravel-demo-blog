@@ -3,6 +3,8 @@
     <td>{{ $value->created_at->format('d.m.Y H:s') }}</td>
     <td><a href="{{ route('admin-users.edit', $value) }}">{{ $value->username }}</a></td>
     <td>{{ $value->email }}</td>
+    <td>{{ $value->articles->count() }}</td>
+    <td>{{ $value->articleComments->count() }}</td>
     <td
         id="td{{ $value->id }}"
         data-id="{{ $value->id }}"
@@ -17,6 +19,7 @@
     </td>
     <td>
         <a href="{{ route('admin-users.edit', $value) }}" type="button" class="btn btn-block btn-primary btn-flat">Редактировать</a>
+        <a href="{{ route('admin-users.show', $value) }}" type="button" class="btn btn-block btn-info btn-flat">Профиль</a>
         <form action="{{ route('admin-users.destroy', $value) }}" method="post">
             @csrf
             @method('DELETE')

@@ -16,7 +16,7 @@ Route::middleware(['guest:admin'])->prefix('/admin')->group(function () {
 
 Route::middleware(['admin.auth:admin', 'admin.banned:admin'])->prefix('/admin')->group(function () {
     /** Resource */
-    Route::resource('/admin-users', AdminUserController::class)->except('show');
+    Route::resource('/admin-users', AdminUserController::class);
     Route::resource('/users', UserController::class);
     Route::resource('/categories', CategoryController::class);
     Route::resource('/tags', TagController::class);

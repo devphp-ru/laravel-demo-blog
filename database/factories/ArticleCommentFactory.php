@@ -31,10 +31,11 @@ class ArticleCommentFactory extends Factory
             'parent_id' => $i++ > 10 && mt_rand(0, 1) ? mt_rand(11, 45) : 0,
             'article_id' => $article->id,
             'user_id' => $userId ?? 0,
+            'admin_id' => 0,
             'username' => $username,
             'email' => $email,
             'comment' => fake()->words(mt_rand(2, 20), true),
-            'is_active' => '1',
+            'is_active' => 1,
             'created_at' => $newDate,
             'updated_at' => $newDate,
         ];

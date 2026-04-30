@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
  * @property int $parent_id
  * @property int $article_id
  * @property int $user_id
+ * @property int $admin_id
  * @property string $username
  * @property string $email
  * @property string $comment
@@ -35,6 +36,7 @@ class ArticleComment extends BaseModel
         'parent_id',
         'article_id',
         'user_id',
+        'admin_id',
         'username',
         'email',
         'comment',

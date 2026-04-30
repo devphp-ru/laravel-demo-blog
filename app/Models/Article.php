@@ -13,6 +13,8 @@ use Illuminate\Support\Carbon;
  * Class Article
  *
  * @property int $id
+ * @property $user_id
+ * @property $admin_id
  * @property int $category_id
  * @property string $slug
  * @property string $title
@@ -37,6 +39,8 @@ class Article extends BaseModel
     use Sluggable;
 
     protected $fillable = [
+        'user_id',
+        'admin_id',
         'category_id',
         'title',
         'content',
